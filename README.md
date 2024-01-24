@@ -25,8 +25,6 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
    `django-admin --version`
    
    > should be version 5.0.1
-   
-   `exit()`
 
 **4. Run**
 - input `python manage.py runserver` in the terminal to run the server
