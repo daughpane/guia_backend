@@ -17,19 +17,19 @@ https://www.python.org/downloads/
 https://pip.pypa.io/en/latest/installation/
 
 **3. Setup virtual environment**
-- open the cloned repository in VSCode and open the terminal 
+    - open the cloned repository in VSCode and open the terminal 
   
-- create guia virtual machine using `py -m venv guia`
+    - create guia virtual machine using `py -m venv guia`
 
-- activate the vm `guia\Scripts\activate.bat`
+    - activate the vm `guia\Scripts\activate.bat`
 
-- install django `py -m pip install Django`
+    - install django `py -m pip install Django`
 
-- modify console appearance `py -m pip install "colorama >= 0.4.6"`
+    - modify console appearance `py -m pip install "colorama >= 0.4.6"`
 
-- verify django version `django-admin --version`
+    - verify django version `django-admin --version`
 
-> should be version 5.0.1
+    > should be version 5.0.1
 
 **4. Run server**
    
