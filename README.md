@@ -24,6 +24,8 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
          cd Documents\Github
   
    `py -m venv guia`
+
+   > should be **(guia)** C:\Users\efypu\Documents\GitHub>
    
    `guia\Scripts\activate.bat`
    
@@ -45,6 +47,5 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
    
    `exit()`
 
-**4. run**
-   
-`python manage.py runserver`
+**4. Run**
+- open the cloned repository in VSCode and input `python manage.py runserver` to create server to run.
