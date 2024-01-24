@@ -39,9 +39,7 @@ https://pip.pypa.io/en/latest/installation/
 
 > should be version 5.0.1
 
-`ctrl + z`
-
-`cd guia_backend`
+`exit()`
 
 4. run
    
