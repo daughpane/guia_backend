@@ -17,7 +17,7 @@ https://www.python.org/downloads/
 https://pip.pypa.io/en/latest/installation/
 
 3. Setup django environment
-- run in command prompt
+- run commands
   
 `py -m venv guia`
 
