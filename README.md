@@ -3,11 +3,11 @@
 https://docs.djangoproject.com/en/5.0/topics/install/#
 
 # STEP BY STEP INSTALLATION OF DJANGO 
-1. Download and install latest python
+**1. Download and install latest python**
    
 https://www.python.org/downloads/ 
 
-2. Install pip
+**2. Install pip**
 - usually pip is automatically installed if using python downloaded from python.org
 - verify by running `pip --version` in cmd
   
@@ -16,8 +16,8 @@ https://www.python.org/downloads/
   
 https://pip.pypa.io/en/latest/installation/
 
-3. Setup django environment
-- run commands
+**3. Setup django environment**
+- run in command prompt where you want your environment installed (make sure not inside the guia_backend)
   
 `py -m venv guia`
 
@@ -41,6 +41,6 @@ https://pip.pypa.io/en/latest/installation/
 
 `exit()`
 
-4. run
+**4. run**
    
 `python manage.py runserver`
