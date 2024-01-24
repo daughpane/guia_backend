@@ -10,7 +10,7 @@ https://www.python.org/downloads/
 2. Install pip
 - usually pip is automatically installed if using python downloaded from python.org
 - verify by running `pip --version` in cmd
-> version 23.2.1
+> version 23.3.2
 - or head to this link to install pip
   
 https://pip.pypa.io/en/latest/installation/
