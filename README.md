@@ -10,7 +10,8 @@ https://www.python.org/downloads/
 2. Install pip
 - usually pip is automatically installed if using python downloaded from python.org
 - verify by running `pip --version` in cmd
-> version 23.3.2
+  
+> should be version 23.3.2
 - or head to this link to install pip
   
 https://pip.pypa.io/en/latest/installation/
@@ -26,6 +27,8 @@ https://pip.pypa.io/en/latest/installation/
 
 `django-admin --version`
 
+> should be version 5.0.1
+
 `py -m pip install "colorama >= 0.4.6"`
 
 `python`
@@ -34,7 +37,7 @@ https://pip.pypa.io/en/latest/installation/
 
 `print(django.get_version())`
 
-> version 5.0.1
+> should be version 5.0.1
 
 `ctrl + z`
 
