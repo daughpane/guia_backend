@@ -21,10 +21,9 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
     - open the cloned repository in VSCode and open the terminal
    
    - input `guia\Scripts\activate.bat` to activate vm
-      
-   `django-admin --version`
+   - verify django version `django-admin --version`
    
-   > should be version 5.0.1
+      > should be version 5.0.1
 
 **4. Run**
 - input `python manage.py runserver` in the terminal to run the server
