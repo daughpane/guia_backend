@@ -4,42 +4,46 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
 
 # STEP BY STEP INSTALLATION OF DJANGO 
 **1. Download and install latest python**
-   
-https://www.python.org/downloads/ 
+
+      https://www.python.org/downloads/ 
 
 **2. Install pip**
-- usually pip is automatically installed if using python downloaded from python.org
-- verify by running `pip --version` in cmd
-  
-> should be version 23.3.2
+- open **command prompt** and run as administrator
+- usually, pip is automatically installed if python is downloaded from python.org
+- if pip is already installed, run `py -m pip install --upgrade pip` to update pip
+- verify by running `pip --version`
+  > should be version 23.3.2
 - or head to this link to install pip
-  
-https://pip.pypa.io/en/latest/installation/
+
+      https://pip.pypa.io/en/latest/installation/
 
 **3. Setup django environment**
-- run in command prompt where you want your environment installed (make sure not inside the guia_backend)
+- run these commands in the same **command prompt**
+   - cd to the folder where guia_backend is located
+   
+         cd Documents\Github
   
-`py -m venv guia`
-
-`guia\Scripts\activate.bat`
-
-`py -m pip install Django`
-
-`django-admin --version`
-
-> should be version 5.0.1
-
-`py -m pip install "colorama >= 0.4.6"`
-
-`python`
-
-`import django`
-
-`print(django.get_version())`
-
-> should be version 5.0.1
-
-`exit()`
+   `py -m venv guia`
+   
+   `guia\Scripts\activate.bat`
+   
+   `py -m pip install Django`
+   
+   `django-admin --version`
+   
+   > should be version 5.0.1
+   
+   `py -m pip install "colorama >= 0.4.6"`
+   
+   `python`
+   
+   `import django`
+   
+   `print(django.get_version())`
+   
+   > should be version 5.0.1
+   
+   `exit()`
 
 **4. run**
    
