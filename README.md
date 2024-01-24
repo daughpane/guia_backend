@@ -18,7 +18,7 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
       https://pip.pypa.io/en/latest/installation/
 
 **3. Setup django environment**
-- run these commands in the same **command prompt**
+- run these commands in **command prompt**
    - cd to the folder where guia_backend is located
    
          cd Documents\Github
