@@ -48,4 +48,5 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
    `exit()`
 
 **4. Run**
-- open the cloned repository in VSCode and input `python manage.py runserver` to create server to run.
+- open the cloned repository in VSCode and open the terminal
+- input `python manage.py runserver` in the terminal to create a server to run.
