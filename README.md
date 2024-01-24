@@ -18,12 +18,12 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
       https://pip.pypa.io/en/latest/installation/
 
 **3. Activate virtual machine**
-    - open the cloned repository in VSCode and open the terminal
-   
+
+   - open the cloned repository in VSCode and open the terminal
    - input `guia\Scripts\activate.bat` to activate vm
    - verify django version `django-admin --version`
    
       > should be version 5.0.1
 
-**4. Run**
+**4. Run server**
 - input `python manage.py runserver` in the terminal to run the server
