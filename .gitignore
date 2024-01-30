@@ -1,1 +1,4 @@
 guia/
+db.sqlite3
+*.env
+/env
