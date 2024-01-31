@@ -34,3 +34,105 @@ https://www.python.org/downloads/
 **4. Run server**
    
 - input `python manage.py runserver` to run the server
+
+# INSTALLING POSTGRESQL LOCALLY #
+   ## Download Postgresql using this link: ##
+   https://www.postgresql.org/download/windows/
+
+   > version should be 16.1
+
+- Open pgAdmin4
+- Click server, and choose PostgreSQL version
+Note: You don’t have to separately install pgAdmin. Fortunately, PostgreSQL includes this for us in its package (free)
+- Right click Databases
+- Create database name (guia_db)
+
+## Now, go back to VSCode and navigate to settings.py ##
+- Modify the DATABASES part
+  
+   ```
+   import environ
+   env = environ.Env()
+   # reading .env file
+   environ.Env.read_env()
+   # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
+   '''SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
+
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': env("DATABASE_NAME"),
+           'USER': env("DATABASE_USER"),
+           'PASSWORD': env("DATABASE_PASSWORD"),
+           'HOST': env("DATABASE_HOST"),
+           'PORT': env("DATABASE_PORT"),
+       }
+   }
+
+Run this in the terminal
+
+      `pip install django-environ`
+
+      `pip freeze`
+
+      `pip install psycopg2`
+
+
+## Create .env file with this content ##
+   ```
+   SECRET_KEY=0x!b#(1*cd73w$&azzc6p+essg7v=g80ls#z&xcx*mpemx&@9$
+   DATABASE_NAME=guia_db
+   DATABASE_USER=postgres
+   DATABASE_PASSWORD=kabitsass
+   DATABASE_HOST=127.0.0.1
+   DATABASE_PORT=5432
+   ```
+
+## Add this in the gitignore ##
+   ```
+   db.sqlite3
+   *.env
+   /env
+   ```
+
+## Now, migrate the table to the Postgresql database ##
+
+- Go to settings.py and register guia_db in the INSTALLED_APPS
+  
+   Run command
+
+   `python manage.py makemigrations`
+
+   Expect "No changes detected" on the console
+
+   `python manage.py migrate`
+
+   Expecting "Applying ... OK" and no error
+
+## Verify tables added ##
+- Go back to pgAdmin
+- Right click the db_name to refresh
+- Double click the "Tables" 
+- Right click the new table added and then View/Edit Data/All Rows
+
+
+## Let's make a sample data for our table ##
+Go back to VSCode and run command
+
+   `python manage.py shell`
+
+   `from guia_db.models import Model`
+
+   `objectname=classname(attribute="attribute_value")`
+
+   `objectname.save()`
+
+## Check the changes in pgAdmin ##
+- Right click to refresh the table 
+- Right click the table and then View/Edit Data/All Rows
+- Verify data added
+
+
+### Reference on How to Start Django Project with a Database(PostgreSQL): ###
+
+https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
