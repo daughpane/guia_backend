@@ -77,6 +77,10 @@ Run this in the terminal
 
       `pip install psycopg2`
 
+      `pip install django_rest_framework`
+
+      `pip install uuid`
+
 
 ## Create .env file with this content ##
    ```
