@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.core.validators import RegexValidator
-import Museum
+from .Museum import Museum
 
 # Define the attributes and methods of the Admin model
 class Admin(models.Model):
