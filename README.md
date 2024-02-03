@@ -136,3 +136,24 @@ Go back to VSCode and run command
 ### Reference on How to Start Django Project with a Database(PostgreSQL): ###
 
 https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
+
+
+# Django Admin
+Django Admin is an interface automatically made by django so we can access our tables without using third-party database manager (like MySQL Workbench or PgAdmin).
+
+Precondition:
+You must be running in the virtual environmnent as instructed above and the app is already running on the localhost.
+
+**1. Create a superuser**
+- Make sure you are running in the virtual environment as instructed above.
+- Run the app using python manage.py runserver
+- On a separate terminal run `python manage.py createsuperuser`
+- You will be prompted to enter username, email (can be skipped), and password. This will be your credential in accessing the admin.
+
+**2. Accessing the django-admin**
+- Go to http://127.0.0.1:8000/admin, or replace the base url with whatever url is used when you run your app locally.
+- You will be prompted to input the username and password. Enter the credentials you used when you created the superuser.
+
+**3. Navigating the django-admin**
+- Upon logging in, you will be redirected to the page that includes all the tables present in the app.
+- If your table is not in django-admin, it is not yet registered in `admin.py`
