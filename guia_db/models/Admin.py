@@ -5,6 +5,7 @@ from .Museum import Museum
 
 # Define the attributes and methods of the Admin model
 class Admin(models.Model):
+    # unique id for each admin of the museum
     # admin_id is a primary key that is auto-incrementing
     admin_id = models.BigAutoField(primary_key=True)
     # admin_username is defined here where RegexValidator ensures that only accepted usernames will be used

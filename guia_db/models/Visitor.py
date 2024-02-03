@@ -4,6 +4,7 @@ import uuid
 
 # Define the attributes and methods of the Visitor model
 class Visitor(models.Model):
+    # unique id for each visitors
     # visitor_id is a primary key that is auto-incrementing
     visitor_id = models.BigAutoField(primary_key=True)
     # visitor_token is a text field that will store a generated token where token is not editable 

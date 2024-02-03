@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models.Admin import Admin
 from .models.Museum import Museum
 from .models.Visitor import Visitor
+from .models.Section import Section
 
 # This file is for registering your models to django-admin.
 # It is important to register your models here so it will be visible in the django-admin
@@ -43,6 +44,7 @@ class AdminAdmin(admin.ModelAdmin):
 
   def get_museum_name(self, obj):
     return obj.museum_id.museum_name
+  get_museum_name.short_description = "Museum Name"  
 
 admin.site.register(Admin, AdminAdmin)
 
@@ -52,3 +54,14 @@ class VisitorAdmin(admin.ModelAdmin):
   ordering = ('-visited_on',)
 
 admin.site.register(Visitor, VisitorAdmin)
+
+class SectionAdmin(admin.ModelAdmin):
+  list_display = ('section_id', 'section_name', 'get_museum_name')
+  search_fields = ('section_id', 'section_name', 'museum_id__museum_name')
+  ordering = ('section_id',)
+
+  def get_museum_name(self, obj):
+    return obj.museum_id.museum_name
+  get_museum_name.short_description = "Museum Name"  
+
+admin.site.register(Section, SectionAdmin)
