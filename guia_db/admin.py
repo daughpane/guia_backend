@@ -88,8 +88,12 @@ class ArtworkAdmin(admin.ModelAdmin):
 admin.site.register(Artwork, ArtworkAdmin)
 
 class ArtworkVisitsAdmin(admin.ModelAdmin):
-  list_display = ('visit_id', 'visitor_id', 'art_id', 'art_visited_on', 'visit_type')
-  search_fields = ('visit_id', 'visitor_id', 'art_id', 'art_visited_on', 'visit_type')
-  ordering = ('art_visited_on',)
+  list_display = ('visit_id', 'visitor_id', 'get_art_title', 'art_visited_on', 'visit_type')
+  search_fields = ('visit_id', 'visitor_id', 'art_id__art_title', 'art_visited_on', 'visit_type')
+  ordering = ('visit_id',)
+
+  def get_art_title(self, obj):
+    return obj.art_id.title
+  get_art_title.short_description = "Art Visited"
 
 admin.site.register(Artwork_Visits, ArtworkVisitsAdmin)

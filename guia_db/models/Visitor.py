@@ -20,3 +20,5 @@ class Visitor(models.Model):
         # call the save method of the superclass
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return str(self.visitor_id)
