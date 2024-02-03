@@ -71,11 +71,7 @@ Note: You don’t have to separately install pgAdmin. Fortunately, PostgreSQL in
 
 Run this in the terminal
 
-      `pip install django-environ`
-
-      `pip freeze`
-
-      `pip install psycopg2`
+      `pip install -r requirements.txt`
 
 
 ## Create .env file with this content ##
