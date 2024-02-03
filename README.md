@@ -80,7 +80,7 @@ Run this in the terminal
    DATABASE_NAME=guia_db
    DATABASE_USER=postgres
    DATABASE_PASSWORD=kabitsass
-   DATABASE_HOST=127.0.0.1
+   DATABASE_HOST=guia-instance.c7wwoc6wym12.ap-southeast-1.rds.amazonaws.com
    DATABASE_PORT=5432
    ```
 
