@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+import uuid
 
 # Define the attributes and methods of the Visitor model
 class Visitor(models.Model):
@@ -16,3 +18,4 @@ class Visitor(models.Model):
             self.visitor_token = str(uuid.uuid4())
         # call the save method of the superclass
         super().save(*args, **kwargs)
+
