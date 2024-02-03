@@ -4,6 +4,7 @@ from .models.Museum import Museum
 from .models.Visitor import Visitor
 from .models.Section import Section
 from .models.Artwork import Artwork
+from .models.Artwork_Visits import Artwork_Visits
 
 # This file is for registering your models to django-admin.
 # It is important to register your models here so it will be visible in the django-admin
@@ -85,3 +86,10 @@ class ArtworkAdmin(admin.ModelAdmin):
   get_updated_by_name.short_description = "Updated By"
 
 admin.site.register(Artwork, ArtworkAdmin)
+
+class ArtworkVisitsAdmin(admin.ModelAdmin):
+  list_display = ('visit_id', 'visitor_id', 'art_id', 'art_visited_on', 'visit_type')
+  search_fields = ('visit_id', 'visitor_id', 'art_id', 'art_visited_on', 'visit_type')
+  ordering = ('art_visited_on',)
+
+admin.site.register(Artwork_Visits, ArtworkVisitsAdmin)
