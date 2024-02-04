@@ -86,9 +86,11 @@ Run this in the terminal
 
 ## Add this in the gitignore ##
    ```
+   guia/
    db.sqlite3
    *.env
    /env
+   *.pyc
    ```
 
 ## Now, migrate the table to the Postgresql database ##
