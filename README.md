@@ -155,3 +155,14 @@ You must be running in the virtual environmnent as instructed above and the app 
 **3. Navigating the django-admin**
 - Upon logging in, you will be redirected to the page that includes all the tables present in the app.
 - If your table is not in django-admin, it is not yet registered in `admin.py`
+
+# API TEST #
+- Open django admin and add API key.
+- Note the API key generated after creation since it will only appear once.
+- Open postman.
+- Set the correct request method e.g.  **GET**.
+- Enter the API endpoint URL in the request URL field e.g. **http://127.0.0.1:8000/PATH**.
+- Go to the Authorization tab and set the authorization type to **No Auth**.
+- Now go to the Headers tab.
+- Set Key to "Authorization" and add Value "Api-Key + generated API key".
+- Click **send**.
