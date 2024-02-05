@@ -10,7 +10,7 @@ class VisitType(models.TextChoices):
         MANUAL = 'manual', _('Manual')
 
 # Define the attributes and methods of the Artwork_Visits model
-class Artwork_Visits(models.Model):
+class ArtworkVisits(models.Model):
     # visit_id is a primary key that is auto incrementing
     visit_id = models.BigAutoField(primary_key=True)
     # visitor_id is a foreign key from the Visitor model

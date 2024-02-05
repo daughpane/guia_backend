@@ -3,5 +3,5 @@ from . import views
 from django.conf import settings
 
 urlpatterns = [
-  path('museum/get/all', views.getAllMuseums),
+  path('api/museum/get/all', views.getAllMuseums),
 ]

@@ -3,3 +3,4 @@ from .Visitor import Visitor
 from .Museum import Museum
 from .Section import Section
 from .Artwork import Artwork
+from .ArtworkVisits import ArtworkVisits
