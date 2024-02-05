@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 from django.core.validators import RegexValidator
 from .Museum import Museum
 
@@ -32,3 +33,7 @@ class Admin(models.Model):
         self.admin_password = make_password(self.admin_password)
         # call the save method of the superclass
         super().save(*args, **kwargs)
+
+    def checkPassword(self, input_password):
+        # Check if the input password matches the hashed password
+        return check_password(input_password, self.admin_password)
