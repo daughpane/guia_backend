@@ -10,3 +10,9 @@ def getAllMuseums(request):
   app = Museum.objects.all()
   serializer = MuseumSerializer(app, many=True)
   return Response(serializer.data)
+
+# class MuseumListAPIView(APIView):
+#   def get(self, request, *args, **kwargs):
+#       museums = Museum.objects.all()
+#       serializer = MuseumSerializer(museums, many=True)
+#       return Response(serializer.data)
