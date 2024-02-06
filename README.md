@@ -23,12 +23,10 @@ Make sure to uninstall the other python installed by doing the following process
   
    https://pip.pypa.io/en/latest/installation/
 
-Note: If you have created virtual environment named guia, delete it first. 
-
-## Run this in the terminal to install all the dependencies.
-
-      `pip install -r requirements.txt`
-
+**Notes:**
+- If you have created virtual environment named guia, delete it first. 
+- Make sure you are in the main branch.
+  
 ## Verify Python and Django version ##
    Go back to the vs code with the guia_backend project.
    Run command 
