@@ -17,7 +17,7 @@ class Admin(models.Model):
         )
     ])
     # admin_password is a char that store hashed passwords 
-    admin_password = models.CharField()
+    admin_password = models.CharField(max_length=128)
     # museum_id is a foreign key from the Museum model 
     # If the referenced museum is deleted, also delete the Admin objects that have references to it
     museum_id = models.ForeignKey(
