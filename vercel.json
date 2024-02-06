@@ -8,6 +8,10 @@
     ],
     "routes": [
       {
+        "src": "/static/(.*)",
+        "dest": "BASE_DIR / 'static'"
+      },
+      {
         "src": "/(.*)",
         "dest": "guia_backend/wsgi.py"
       }
