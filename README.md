@@ -3,9 +3,9 @@
 https://docs.djangoproject.com/en/5.0/topics/install/#
 
 # STEP BY STEP INSTALLATION OF DJANGO 
-**1. Download and install latest python**
+**1. Download and install python version 3.9**
    
-https://www.python.org/downloads/ 
+https://www.python.org/downloads/release/python-390/ 
 
 **2. Install pip**
 - usually pip is automatically installed if using python downloaded from python.org
@@ -15,6 +15,8 @@ https://www.python.org/downloads/
 - or head to this link to install pip
   
    https://pip.pypa.io/en/latest/installation/
+
+Note: If you have created virtual environment named guia, delete it first. 
 
 **3. Setup virtual environment**
    - open the cloned repository in VSCode and open the terminal 
