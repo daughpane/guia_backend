@@ -3,10 +3,17 @@
 https://docs.djangoproject.com/en/5.0/topics/install/#
 
 # STEP BY STEP INSTALLATION OF DJANGO 
-**1. Download and install latest python**
-   
-https://www.python.org/downloads/ 
+**1. Download and install python version 3.9**
+ ```  
+https://www.python.org/downloads/release/python-390/ 
+**Windows x86-64 executable installer**
+Check the **Add Python 3.9 to Path** then select **install now**.
 
+Make sure to uninstall the other python installed by doing the following process:
+1. In your computer search bar, type Control Panel.
+2. And then, click the Programs > Uninstall a Program.
+3. Remove the python version that is not 3.9.
+```
 **2. Install pip**
 - usually pip is automatically installed if using python downloaded from python.org
 - verify by running `pip --version` in cmd
@@ -16,20 +23,34 @@ https://www.python.org/downloads/
   
    https://pip.pypa.io/en/latest/installation/
 
+Note: If you have created virtual environment named guia, delete it first. 
+
+## Run this in the terminal to install all the dependencies.
+
+      `pip install -r requirements.txt`
+
+## Verify Python and Django version ##
+   Go back to the vs code with the guia_backend project.
+   Run command 
+   
+   `python --version` 
+   
+   `django-admin --version`
+   
+   > should be version 3.9 and 4.0, respectively. 
+
 **3. Setup virtual environment**
    - open the cloned repository in VSCode and open the terminal 
   
-   - create guia virtual machine using `py -m venv guia`
+   - create guia virtual machine using `python -m venv guia`
 
    - activate the vm `guia\Scripts\activate.bat`
 
-   - install django `py -m pip install Django`
-
-   - modify console appearance `py -m pip install "colorama >= 0.4.6"`
+   - run command `pip install -r requirements.txt`
 
    - verify django version `django-admin --version`
 
-      > should be version 5.0.1
+      > should be version 4.0.
 
 **4. Run server**
    
@@ -68,12 +89,7 @@ Note: You don’t have to separately install pgAdmin. Fortunately, PostgreSQL in
            'PORT': env("DATABASE_PORT"),
        }
    }
-
-Run this in the terminal
-
-      `pip install -r requirements.txt`
-
-
+   
 ## Create .env file with this content ##
    ```
    SECRET_KEY=0x!b#(1*cd73w$&azzc6p+essg7v=g80ls#z&xcx*mpemx&@9$
