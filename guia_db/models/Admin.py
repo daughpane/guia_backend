@@ -3,12 +3,15 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.core.validators import RegexValidator
 from .Museum import Museum
-
+from django.contrib.auth.models import User
 # Define the attributes and methods of the Admin model
 class Admin(models.Model):
     # unique id for each admin of the museum
     # admin_id is a primary key that is auto-incrementing
     admin_id = models.BigAutoField(primary_key=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
     # admin_username is defined here where RegexValidator ensures that only accepted usernames will be used
     admin_username = models.TextField(validators=[
         RegexValidator(

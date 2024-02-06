@@ -14,7 +14,7 @@ class AdminSerializer(serializers.ModelSerializer):
     username = data.get('admin_username')
     password = data.get('admin_password')
     if not username or not password:
-      raise serializers.ValidationError("Username and password are required.")
+      raise ValidationError("Username and password are required.")
 
     try:
       admin = Admin.objects.get(admin_username=username)
