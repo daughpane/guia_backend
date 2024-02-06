@@ -21,8 +21,8 @@ from django.urls import path, include
 import guia_db.urls 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(guia_db.urls))
+    path('skies-are-crying/', admin.site.urls),
+    path('api/', include(guia_db.urls))
 ]
 
 if settings.DEBUG:
