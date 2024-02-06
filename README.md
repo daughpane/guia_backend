@@ -4,16 +4,16 @@ https://docs.djangoproject.com/en/5.0/topics/install/#
 
 # STEP BY STEP INSTALLATION OF DJANGO 
 **1. Download and install python version 3.9**
-   
+ ```  
 https://www.python.org/downloads/release/python-390/ 
 **Windows x86-64 executable installer**
 Check the **Add Python 3.9 to Path** then select **install now**.
 
 Make sure to uninstall the other python installed by doing the following process:
-- In your search bar, type Control Panel.
-- And then, click the Programs > Uninstall a Program.
-- Remove the python version that is not 3.9.
-
+1. In your computer search bar, type Control Panel.
+2. And then, click the Programs > Uninstall a Program.
+3. Remove the python version that is not 3.9.
+```
 **2. Install pip**
 - usually pip is automatically installed if using python downloaded from python.org
 - verify by running `pip --version` in cmd
