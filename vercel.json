@@ -23,6 +23,5 @@
       "src": "/(.*)",
       "dest": "guia_backend/wsgi.py"
     }
-  ],
-  "outputDirectory": "staticfiles"
+  ]
 }
