@@ -10,4 +10,5 @@ urlpatterns = router.urls
 urlpatterns += [
   path('api/museum/get/all', views.getAllMuseums),
   path('api/admin/login', views.AdminLoginApiView.as_view()),
+  path('api/admin/change-password', views.ChangePasswordApiView.as_view()),
 ]
