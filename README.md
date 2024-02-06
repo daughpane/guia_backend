@@ -44,7 +44,7 @@ Note: If you have created virtual environment named guia, delete it first.
   
    - create guia virtual machine using `python -m venv guia`
 
-   - activate the vm `guia\Scripts\activate.bat`
+   - activate the vm `guia\Scripts\activate`
 
    - run command `pip install -r requirements.txt`
 
