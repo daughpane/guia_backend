@@ -41,7 +41,7 @@ class AdminLoginApiView(ObtainAuthToken):
           token.save()
 
           response_data = {
-            'admin_id': admin.admin_id, 
+            'admin_id': admin.user.id, 
             'museum_id': admin.museum_id.museum_id,
             'token': token.key, 
             'token_expires': token.expires,
@@ -53,22 +53,17 @@ class AdminLoginApiView(ObtainAuthToken):
             status=status.HTTP_200_OK
           )
 
-      except AuthenticationFailed as e:
-        return Response(data={
-          'error': 'Invalid credentials.',
-          'dev_message': 'Invalid credentials.'
-          }, status=status.HTTP_401_UNAUTHORIZED)
-
       except ObjectDoesNotExist as e:
         return Response(data={
           'error': 'Invalid credentials.',
-          'dev_message': 'Account does not exist.'
+          'dev_message': 'Wrong username or password.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ValidationError as e:
         return Response(
           data={
-            'error': 'Username and password are required.'
+            'error': 'Username and password are required.',
+            'dev_message':'Missing parameters.'
           }, status=status.HTTP_400_BAD_REQUEST)
     
     except JSONDecodeError:
@@ -79,7 +74,7 @@ class AdminLoginApiView(ObtainAuthToken):
 
 
 class ChangePasswordApiView(APIView):
-    permission_classes = [HasAPIKey]
+    permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
     def post(self, request, *args, **kwargs):    
@@ -102,13 +97,13 @@ class ChangePasswordApiView(APIView):
 
       except AuthenticationFailed as e:
         return Response(data={
-          'error': e.detail,
+          'error': 'Invalid credentials.',
           'dev_message': 'Invalid credentials.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'error': e.detail,
+          'error': 'Account does not exist',
           'dev_message': 'Account does not exist.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 

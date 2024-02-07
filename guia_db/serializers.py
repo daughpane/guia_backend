@@ -1,15 +1,17 @@
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
 from .models import Admin
 from .models import *
 
-class AdminSerializer(serializers.ModelSerializer):
-
-  class Meta:
-    model=Admin
-    fields=['admin_username', 'admin_password']
+class AdminSerializer(serializers.Serializer):
+  admin_username = serializers.CharField(required=True)
+  admin_password = serializers.CharField(required=True)
   
   def validate(self, data):
     username = data.get('admin_username')
@@ -18,13 +20,11 @@ class AdminSerializer(serializers.ModelSerializer):
       raise ValidationError("Username and password are required.")
 
     try:
-      admin = Admin.objects.get(admin_username=username)
+      user = authenticate(username = username, password = password)
+      admin = Admin.objects.get(user=user)
       
     except ObjectDoesNotExist:
       raise ObjectDoesNotExist("Admin username does not exist.")
-    
-    if not admin.checkPassword(input_password=password):
-      raise AuthenticationFailed("Incorrect password.")
     
     data['admin'] = admin
     return data
@@ -41,7 +41,10 @@ class ChangePasswordSerializer(serializers.Serializer):
       old_password = data.get('old_password')
       
       try:
-        admin = Admin.objects.get(admin_id=admin_id)
+        print('here')
+        user = User.objects.get(username='curator1')
+        print(user)
+        admin = Admin.objects.get(user=user)
         
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin username does not exist.")
