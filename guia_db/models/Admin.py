@@ -8,20 +8,13 @@ from django.contrib.auth.models import User
 class Admin(models.Model):
     # unique id for each admin of the museum
     # admin_id is a primary key that is auto-incrementing
+    # admin_id is different from user.id user_id is what we use to uniquely identify each admin. Although admin_id is also unique, it is not what we mainly use to refer to the user.
     admin_id = models.BigAutoField(primary_key=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    # admin is a type of user.
+    # user is django built-in model.
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    # admin_username is defined here where RegexValidator ensures that only accepted usernames will be used
-    admin_username = models.TextField(validators=[
-        RegexValidator(
-            regex=r'^[a-zA-Z0-9_-]*$',
-            message='Username can only letters, digits, hyphen, and underscore',
-            code='invalid_username'
-        )
-    ])
-    # admin_password is a char that store hashed passwords 
-    admin_password = models.CharField(max_length=128)
     # museum_id is a foreign key from the Museum model 
     # If the referenced museum is deleted, also delete the Admin objects that have references to it
     museum_id = models.ForeignKey(
@@ -29,14 +22,3 @@ class Admin(models.Model):
         on_delete=models.CASCADE, 
         verbose_name='museum id'
     )
-
-    # Override the save method
-    def save(self, *args, **kwargs):
-        # password is hashed before saving
-        self.admin_password = make_password(self.admin_password)
-        # call the save method of the superclass
-        super().save(*args, **kwargs)
-
-    def checkPassword(self, input_password):
-        # Check if the input password matches the hashed password
-        return check_password(input_password, self.admin_password)
