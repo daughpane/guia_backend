@@ -16,8 +16,6 @@ class AdminSerializer(serializers.Serializer):
   def validate(self, data):
     username = data.get('admin_username')
     password = data.get('admin_password')
-    if not username or not password:
-      raise ValidationError("Username and password are required.")
 
     try:
       user = authenticate(username = username, password = password)
@@ -39,18 +37,20 @@ class ChangePasswordSerializer(serializers.Serializer):
     def validate(self, data):
       admin_id = data.get('admin_id')
       old_password = data.get('old_password')
+      new_password = data.get('new_password')
       
       try:
-        print('here')
-        user = User.objects.get(username='curator1')
-        print(user)
-        admin = Admin.objects.get(user=user)
+        admin = Admin.objects.get(user__id=admin_id)
         
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin username does not exist.")
 
-      if not admin.checkPassword(old_password):
-          raise AuthenticationFailed("Invalid old password.")
+
+      if not admin.user.check_password(old_password):
+        raise AuthenticationFailed("Invalid old password.")
+
+      if old_password==new_password:
+        raise ValidationError("Password already used.")
           
       data['admin'] = admin
       return data

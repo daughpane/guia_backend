@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny
 from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 import traceback
@@ -33,7 +34,7 @@ class AdminLoginApiView(ObtainAuthToken):
       serializer = self.serializer_class(data=data, context={'request': request})
       
       try:
-          serializer.is_valid()
+          serializer.is_valid(raise_exception=True)
           admin = serializer.validated_data['admin']
           
           token, created = Token.objects.get_or_create(user=admin.user)
@@ -62,7 +63,7 @@ class AdminLoginApiView(ObtainAuthToken):
       except ValidationError as e:
         return Response(
           data={
-            'error': 'Username and password are required.',
+            'error': e.detail,
             'dev_message':'Missing parameters.'
           }, status=status.HTTP_400_BAD_REQUEST)
     
@@ -74,7 +75,8 @@ class AdminLoginApiView(ObtainAuthToken):
 
 
 class ChangePasswordApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     serializer_class = ChangePasswordSerializer
 
     def post(self, request, *args, **kwargs):    
@@ -87,8 +89,8 @@ class ChangePasswordApiView(APIView):
         admin = serializer.validated_data['admin']
         new_password = serializer.validated_data['new_password']
 
-        admin.admin_password = new_password
-        admin.save()
+        admin.user.set_password(new_password)
+        admin.user.save()
 
         return Response(
           {'message': 'Password changed successfully.'},
@@ -97,13 +99,13 @@ class ChangePasswordApiView(APIView):
 
       except AuthenticationFailed as e:
         return Response(data={
-          'error': 'Invalid credentials.',
+          'error': e.detail,
           'dev_message': 'Invalid credentials.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'error': 'Account does not exist',
+          'error': e.args[0],
           'dev_message': 'Account does not exist.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 

@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['.vercel.app', '*']
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
 # Application definition
 
 INSTALLED_APPS = [
