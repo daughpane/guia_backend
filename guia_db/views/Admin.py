@@ -12,9 +12,12 @@ from rest_framework.permissions import AllowAny
 from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 import traceback
+
+from ..authentication import token_expire_handler, expires_in, ExpiringTokenAuthentication
 
 from json.decoder import JSONDecodeError
 from ..models import Admin
@@ -33,18 +36,18 @@ class AdminLoginApiView(ObtainAuthToken):
       serializer = self.serializer_class(data=data, context={'request': request})
       
       try:
-          serializer.is_valid()
+          serializer.is_valid(raise_exception=True)
           admin = serializer.validated_data['admin']
           
           token, created = Token.objects.get_or_create(user=admin.user)
-          token.expires = token.created + timedelta(minutes=5)
+          is_expired, token = token_expire_handler(token)   
           token.save()
 
           response_data = {
             'admin_id': admin.user.id, 
             'museum_id': admin.museum_id.museum_id,
             'token': token.key, 
-            'token_expires': token.expires,
+            'token_expires': token.created+expires_in(token),
             'token_created': token.created
             }
 
@@ -62,19 +65,20 @@ class AdminLoginApiView(ObtainAuthToken):
       except ValidationError as e:
         return Response(
           data={
-            'error': 'Username and password are required.',
+            'error': e.detail,
             'dev_message':'Missing parameters.'
           }, status=status.HTTP_400_BAD_REQUEST)
     
     except JSONDecodeError:
         return JsonResponse(
-          {"result": "error", "message": "JSON decoding error."},
+          {"error": "Internal error.", "dev_message": "JSON decoding error."},
           status=status.HTTP_408_REQUEST_TIMEOUT)
 
 
 
 class ChangePasswordApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
     serializer_class = ChangePasswordSerializer
 
     def post(self, request, *args, **kwargs):    
@@ -87,8 +91,8 @@ class ChangePasswordApiView(APIView):
         admin = serializer.validated_data['admin']
         new_password = serializer.validated_data['new_password']
 
-        admin.admin_password = new_password
-        admin.save()
+        admin.user.set_password(new_password)
+        admin.user.save()
 
         return Response(
           {'message': 'Password changed successfully.'},
@@ -97,13 +101,13 @@ class ChangePasswordApiView(APIView):
 
       except AuthenticationFailed as e:
         return Response(data={
-          'error': 'Invalid credentials.',
+          'error': e.detail,
           'dev_message': 'Invalid credentials.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'error': 'Account does not exist',
+          'error': e.args[0],
           'dev_message': 'Account does not exist.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 

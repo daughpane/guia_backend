@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['.vercel.app', '*']
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -151,5 +153,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework_api_key.permissions.HasAPIKey",
         "rest_framework.permissions.IsAuthenticated"
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'guia_db.authentication.ExpiringTokenAuthentication',
+    ),
 }
+
+TOKEN_EXPIRED_AFTER_TIME = 2
