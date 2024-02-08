@@ -153,5 +153,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework_api_key.permissions.HasAPIKey",
         "rest_framework.permissions.IsAuthenticated"
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'guia_db.authentication.ExpiringTokenAuthentication',
+    ),
 }
+
+TOKEN_EXPIRED_AFTER_TIME = 2

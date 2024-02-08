@@ -17,6 +17,8 @@ from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 import traceback
 
+from ..authentication import token_expire_handler, expires_in, ExpiringTokenAuthentication
+
 from json.decoder import JSONDecodeError
 from ..models import Admin
 from ..serializers import *
@@ -38,14 +40,14 @@ class AdminLoginApiView(ObtainAuthToken):
           admin = serializer.validated_data['admin']
           
           token, created = Token.objects.get_or_create(user=admin.user)
-          token.expires = token.created + timedelta(minutes=5)
+          is_expired, token = token_expire_handler(token)   
           token.save()
 
           response_data = {
             'admin_id': admin.user.id, 
             'museum_id': admin.museum_id.museum_id,
             'token': token.key, 
-            'token_expires': token.expires,
+            'token_expires': token.created+expires_in(token),
             'token_created': token.created
             }
 
@@ -69,14 +71,14 @@ class AdminLoginApiView(ObtainAuthToken):
     
     except JSONDecodeError:
         return JsonResponse(
-          {"result": "error", "message": "JSON decoding error."},
+          {"error": "Internal error.", "dev_message": "JSON decoding error."},
           status=status.HTTP_408_REQUEST_TIMEOUT)
 
 
 
 class ChangePasswordApiView(APIView):
     permission_classes = [IsAuthenticated, HasAPIKey]
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
     serializer_class = ChangePasswordSerializer
 
     def post(self, request, *args, **kwargs):    
