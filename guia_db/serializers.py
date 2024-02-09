@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
 
 from .models import Admin
 from .models import *
@@ -32,7 +33,7 @@ class AdminSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     admin_id = serializers.CharField(required=True)
     old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, validators=[validate_password])
 
     def validate(self, data):
       admin_id = data.get('admin_id')
