@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 
 from .models import Admin
+from .models import *
 
 class AdminSerializer(serializers.Serializer):
   admin_username = serializers.CharField(required=True)
@@ -38,7 +39,7 @@ class ChangePasswordSerializer(serializers.Serializer):
       admin_id = data.get('admin_id')
       old_password = data.get('old_password')
       new_password = data.get('new_password')
-
+      
       try:
         admin = Admin.objects.get(user__id=admin_id)
         
@@ -57,20 +58,15 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 
-class LogoutSerializer(serializers.Serializer):
-    admin_id = serializers.CharField(required=True)
-    
-    def validate(self, data):
-      admin_id = data.get('admin_id')
 
-      try:
-        admin = Admin.objects.get(user__id=admin_id)
-        print(admin)
-      except ObjectDoesNotExist:
-        raise ObjectDoesNotExist("Admin username does not exist.")
-
-      data['admin'] = admin
-      return data
   
 
-    
+class MuseumSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=Museum
+    fields=('museum_id','museum_name')
+
+class ArtworkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Artwork
+        fields = '__all__'
