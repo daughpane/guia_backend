@@ -117,4 +117,34 @@ class ChangePasswordApiView(APIView):
             'error': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
 
-      
+class AdminLogoutApiView(APIView):
+  permission_classes = [IsAuthenticated, HasAPIKey]
+  serializer_class = LogoutSerializer
+
+  def post(self, request, *args, **kwargs):  
+    try:
+      # Use the AdminSerializer for validation and authentication
+      serializer = self.serializer_class(data=request.data, context={'request': request})
+      serializer.is_valid(raise_exception=True)
+
+      admin = serializer.validated_data['admin']  
+      token = Token.objects.get(user=admin.user)
+      token.delete()
+
+      return Response(
+          {'message': 'Logout successful.'},
+          status=status.HTTP_200_OK)
+
+    except ObjectDoesNotExist as e:
+      return Response(data={
+        'error': e.args[0],
+        'dev_message': 'Account does not exist.'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+
+    except ValidationError as e:
+      return Response(
+        data={
+          'error': e.detail
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
