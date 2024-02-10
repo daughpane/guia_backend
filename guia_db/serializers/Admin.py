@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 
-from .models import Admin
+from ..models import Admin
 
 class AdminSerializer(serializers.Serializer):
   admin_username = serializers.CharField(required=True)
