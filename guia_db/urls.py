@@ -14,4 +14,5 @@ urlpatterns += [
   path('museum/get/all', views.getAllMuseums),
   path('admin/login', views.AdminLoginApiView.as_view()),
   path('admin/change-password', views.ChangePasswordApiView.as_view()),
+  path('admin/logout', views.AdminLogoutApiView.as_view()),
 ]
