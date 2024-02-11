@@ -9,11 +9,11 @@ class AdminAdmin(admin.ModelAdmin):
   # Similarly, since museum_id is just a foreign key, we need to something first so we can search on the name of the museum.
   # To do this, append `__[attribute name]` to the foreign_key attribute name. (In case you are confused, it is a double underscore.)
   search_fields =  ('user__id', 'user__username', 'museum_id__museum_name')
-  ordering = ('admin_id',)
+  ordering = ('user__id',)
 
   def get_museum_name(self, obj):
     return obj.museum_id.museum_name
-  get_museum_name.short_description = "Museum Name"  
+  get_museum_name.short_description = "Museum Name" 
 
   def get_username(self, obj):
     return obj.user.username
