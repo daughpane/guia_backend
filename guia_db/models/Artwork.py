@@ -15,27 +15,16 @@ class Artwork(models.Model):
         related_name = 'section_artworks',
         verbose_name = 'section_id'
     )
-    # location is a foreign key from the Section model
-    # this will specify which section the artwork is located
-    # when the referenced Section is deleted, set location to NULL
-    # allows NULL values if the location of the artwork is not yet finalized
-    location = models.ForeignKey(
-        Section,
-        on_delete = models.SET_NULL,
-        null = True,
-        related_name = 'located_artworks',
-        verbose_name = 'location'
-    )
     # title of the artwork will be stored here as text
     title = models.TextField()
     # medium of the artwork being used is specified here 
     medium = models.TextField()
     # assign date and time when the artwork was published
-    date_published = models.DateTimeField()
+    date_published = models.TextField()
     # storing here the different dimensions of the artwork
     dimen_width_cm = models.DecimalField(max_digits=100, decimal_places=2)
     dimen_length_cm = models.DecimalField(max_digits=100, decimal_places=2)
-    dimen_height_cm = models.DecimalField(max_digits=100, decimal_places=2)
+    dimen_height_cm = models.DecimalField(max_digits=100, decimal_places=2, null=True)
     # this will store the description of the artwork
     description = models.TextField()
     # this is for additional information about the artwork
