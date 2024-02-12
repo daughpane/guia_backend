@@ -18,6 +18,7 @@ class AdminSerializer(serializers.Serializer):
     password = data.get('admin_password')
 
     try:
+      # Authenticate user using username and password
       user = authenticate(username = username, password = password)
       admin = Admin.objects.get(user=user)
       
@@ -32,6 +33,7 @@ class AdminSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     admin_id = serializers.CharField(required=True)
     old_password = serializers.CharField(required=True)
+    # Add django's password validator to check password requirements
     new_password = serializers.CharField(required=True, validators=[validate_password])
 
     def validate(self, data):
@@ -40,13 +42,14 @@ class ChangePasswordSerializer(serializers.Serializer):
       new_password = data.get('new_password')
 
       try:
+        # Since user is a foreignKey, to access its attributes, it needs double underscore
         admin = Admin.objects.get(user__id=admin_id)
         
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin username does not exist.")
 
       if not admin.user.check_password(old_password):
-        raise AuthenticationFailed("Invalid old password.")
+        raise AuthenticationFailed("Invalid credentials.")
 
       if old_password==new_password:
         raise ValidationError("Password already used.")
