@@ -6,14 +6,9 @@ from .Museum import Museum
 from django.contrib.auth.models import User
 # Define the attributes and methods of the Admin model
 class Admin(models.Model):
-    # unique id for each admin of the museum
-    # admin_id is a primary key that is auto-incrementing
-    # admin_id is different from user.id user_id is what we use to uniquely identify each admin. Although admin_id is also unique, it is not what we mainly use to refer to the user.
-    admin_id = models.BigAutoField(primary_key=True)
-
     # admin is a type of user.
     # user is django built-in model.
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
     # museum_id is a foreign key from the Museum model 
     # If the referenced museum is deleted, also delete the Admin objects that have references to it
