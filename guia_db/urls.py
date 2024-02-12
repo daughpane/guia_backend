@@ -11,10 +11,19 @@ urlpatterns = router.urls
 
 
 urlpatterns += [
+  ###### MUSEUM PATHS 
   path('museum/get/all', views.getAllMuseums),
+
+  ###### ADMIN
   path('admin/login', views.AdminLoginApiView.as_view()),
   path('admin/change-password', views.ChangePasswordApiView.as_view()),
   path('admin/logout', views.AdminLogoutApiView.as_view()),
+
+  ###### ARTWORK
   path('artwork/create', views.ArtworkCreateView.as_view()),
   path('artwork/get/all', views.ArtworkListView.as_view()),
+
+  ###### VISITOR
+  path('visitor/generate-token', views.LogVisitorApiView.as_view()),
+
 ]
