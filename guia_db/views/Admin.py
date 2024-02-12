@@ -107,7 +107,7 @@ class ChangePasswordApiView(APIView):
       except AuthenticationFailed as e:
         return Response(data={
           'detail': e.detail,
-          'dev_message': 'Invalid credentials.'
+          'dev_message': 'Invalid old password.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ObjectDoesNotExist as e:
