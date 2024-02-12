@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 
 
 from ..models import Artwork
-from ..serializers import *
+from ..serializers import ArtworkSerializer
 
 class ArtworkCreateView(APIView):
     serializer_class = ArtworkSerializer
