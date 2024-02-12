@@ -12,7 +12,7 @@ urlpatterns = router.urls
 
 urlpatterns += [
   ###### MUSEUM PATHS 
-  path('museum/get/all', views.getAllMuseums),
+  path('museum/get', views.MuseumApiView.as_view()),
 
   ###### ADMIN
   path('admin/login', views.AdminLoginApiView.as_view()),
