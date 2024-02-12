@@ -19,7 +19,6 @@ class LogVisitorApiView(APIView):
     permission_classes = [HasAPIKey]
     serializer_class = VisitorSerializer
 
-
     def post(self, request, *args, **kwargs):    
       try:
         serializer = self.serializer_class(data=request.data, context={'request': request})
@@ -37,7 +36,7 @@ class LogVisitorApiView(APIView):
       except ObjectDoesNotExist as e:
         return Response(data={
           'detail': e.args[0],
-          'dev_message': 'Account does not exist.'
+          'dev_message': 'Wrong parameter or wrong ang museum ID nga nasend.'
           }, status=status.HTTP_400_BAD_REQUEST)
 
       except ValidationError as e:
