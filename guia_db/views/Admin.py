@@ -23,31 +23,35 @@ from json.decoder import JSONDecodeError
 from ..models import Admin
 from ..serializers import *
 
-
+# This class implements ObtainAuthToken
+# ObtainAuthToken is builtin module by DRF to handle authentication
 class AdminLoginApiView(ObtainAuthToken):
   serializer_class = AdminSerializer
+  # Login requires API Key only
   permission_classes = [HasAPIKey]
   def post(self, request, *args, **kwargs):
     try:
-      # Parse JSON data from the request
-      data = JSONParser().parse(request)
-      
       # Use the AdminSerializer for validation and authentication
-      serializer = self.serializer_class(data=data, context={'request': request})
+      serializer = self.serializer_class(data=request.data, context={'request': request})
       
       try:
           serializer.is_valid(raise_exception=True)
           admin = serializer.validated_data['admin']
           
+          # Creates token if not yet created
           token, created = Token.objects.get_or_create(user=admin.user)
+
+          # Checks if token is expired
           is_expired, token = token_expire_handler(token)   
+
+          # Saves token
           token.save()
 
           response_data = {
             'admin_id': admin.user.id, 
             'museum_id': admin.museum_id.museum_id,
             'token': token.key, 
-            'token_expires': token.created+expires_in(token),
+            'token_expires': token.created+expires_in(token), # Expires_in returns time in seconds, so add that in token.created
             'token_created': token.created
             }
 
@@ -58,25 +62,26 @@ class AdminLoginApiView(ObtainAuthToken):
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'error': 'Invalid credentials.',
+          'detail': 'Invalid credentials.',
           'dev_message': 'Wrong username or password.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ValidationError as e:
         return Response(
           data={
-            'error': e.detail,
+            'detail': e.detail,
             'dev_message':'Missing parameters.'
           }, status=status.HTTP_400_BAD_REQUEST)
     
     except JSONDecodeError:
         return JsonResponse(
-          {"error": "Internal error.", "dev_message": "JSON decoding error."},
+          {"detail": "Internal error.", "dev_message": "JSON decoding error."},
           status=status.HTTP_408_REQUEST_TIMEOUT)
 
 
 
 class ChangePasswordApiView(APIView):
+    # Requires token and API Key
     permission_classes = [IsAuthenticated, HasAPIKey]
     authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
     serializer_class = ChangePasswordSerializer
@@ -91,7 +96,7 @@ class ChangePasswordApiView(APIView):
         admin = serializer.validated_data['admin']
         new_password = serializer.validated_data['new_password']
 
-        admin.user.set_password(new_password)
+        admin.user.set_password(new_password) # Set new password
         admin.user.save()
 
         return Response(
@@ -101,24 +106,25 @@ class ChangePasswordApiView(APIView):
 
       except AuthenticationFailed as e:
         return Response(data={
-          'error': e.detail,
+          'detail': e.detail,
           'dev_message': 'Invalid credentials.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'error': e.args[0],
+          'detail': e.args[0],
           'dev_message': 'Account does not exist.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
       except ValidationError as e:
         return Response(
           data={
-            'error': e.detail
+            'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminLogoutApiView(APIView):
   permission_classes = [IsAuthenticated, HasAPIKey]
+  authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
   serializer_class = LogoutSerializer
 
   def post(self, request, *args, **kwargs):  
@@ -137,14 +143,14 @@ class AdminLogoutApiView(APIView):
 
     except ObjectDoesNotExist as e:
       return Response(data={
-        'error': e.args[0],
+        'detail': e.args[0],
         'dev_message': 'Account does not exist.'
         }, status=status.HTTP_401_UNAUTHORIZED)
 
     except ValidationError as e:
       return Response(
         data={
-          'error': e.detail
+          'detail': e.detail
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
