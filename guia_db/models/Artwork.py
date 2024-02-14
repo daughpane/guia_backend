@@ -1,11 +1,12 @@
 from django.db import models
+from django import forms
 from .Section import Section
 from .Admin import Admin
 
 # Define the attributes and methods of the Artwork model
 class Artwork(models.Model):
     # unique id for each artwork
-    #art_id is a primary key that is auto incrementing
+    # art_id is a primary key that is auto incrementing
     art_id = models.BigAutoField(primary_key=True)
     # section_id is a foreign key from the Section model
     # If the referenced section is deleted, also delete the Artwork objects that have references to it
@@ -29,8 +30,6 @@ class Artwork(models.Model):
     description = models.TextField()
     # this is for additional information about the artwork
     additional_info = models.TextField()
-    # images of the artwork will be stored here as a list from the cloud storage
-    images = models.JSONField(default=list)
     # automatically set the field to the current date and time when the Artwork object is created
     added_on = models.DateTimeField(auto_now_add=True)
     # admin_id is a foreign key from the Admin model
