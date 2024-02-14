@@ -30,7 +30,6 @@ class Artwork(models.Model):
     description = models.TextField()
     # this is for additional information about the artwork
     additional_info = models.TextField()
-    images = models.FileField(null=True)
     # automatically set the field to the current date and time when the Artwork object is created
     added_on = models.DateTimeField(auto_now_add=True)
     # admin_id is a foreign key from the Admin model
