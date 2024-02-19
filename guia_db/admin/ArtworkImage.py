@@ -3,7 +3,7 @@ from ..models import Artwork
 from ..models.ArtworkImage import ArtworkImage
 
 class ArtworkImageAdmin(admin.ModelAdmin):
-    list_display = ('get_art_id', 'image')
+    list_display = ('get_art_id', 'image', 'is_thumbnail')
     search_fields = ('artwork__artwork_title', 'image')
     ordering = ('artwork__art_id',)
 

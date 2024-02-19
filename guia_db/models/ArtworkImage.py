@@ -13,10 +13,6 @@ class ArtworkImage(models.Model):
     
     image = models.ImageField(upload_to=get_upload_to)
 
-    # def clean(self):
-    #     # Ensure that curators upload exactly 10 images for each artwork
-    #     if self.artwork.images.count() != 10:
-    #         raise ValidationError("Please add exactly 10 images for this artwork.")
-        
+    is_thumbnail = models.BooleanField(default=False)        
     class Meta:
         verbose_name_plural = "Artwork Images"
