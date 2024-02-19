@@ -96,6 +96,9 @@ Note: You don’t have to separately install pgAdmin. Fortunately, PostgreSQL in
    DATABASE_PASSWORD=kabitsass
    DATABASE_HOST=guia-instance.c7wwoc6wym12.ap-southeast-1.rds.amazonaws.com
    DATABASE_PORT=5432
+   AWS_ACCESS_KEY_ID=AKIAYS2NTMDGQ7HYYKVA
+   AWS_SECRET_ACCESS_KEY=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
+   AWS_STORAGE_BUCKET_NAME=guia-buckets
    ```
 
 ## Add this in the gitignore ##
