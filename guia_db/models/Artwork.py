@@ -18,6 +18,7 @@ class Artwork(models.Model):
     )
     # title of the artwork will be stored here as text
     title = models.TextField()
+    artist_name = models.TextField()
     # medium of the artwork being used is specified here 
     medium = models.TextField()
     # assign date and time when the artwork was published
