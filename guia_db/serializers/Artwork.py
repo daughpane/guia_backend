@@ -17,6 +17,7 @@ def validate_images_length(images):
 class ArtworkSerializer(serializers.Serializer):
     section_id = serializers.IntegerField(required=True)
     title = serializers.CharField(required=True)
+    artist_name = serializers.CharField(required=True)
     medium = serializers.CharField(required=True)
     date_published = serializers.CharField(required=True)
     dimen_width_cm = serializers.DecimalField(max_digits=100, decimal_places=2, required=True, validators=[greater_than_zero])
@@ -31,7 +32,8 @@ class ArtworkSerializer(serializers.Serializer):
 
     def validate(self, data):
       section_id = data.get("section_id")
-      title = data.get("title")
+      title = data.get("title")      
+      artist_name = data.get("artist_name")
       medium = data.get("medium")
       date_published = data.get("date_published")
       description = data.get("description")
@@ -55,10 +57,13 @@ class ArtworkSerializer(serializers.Serializer):
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin does not exist.")
       
+      if Artwork.objects.filter(title=title, artist_name=artist_name).exists():
+          raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
       
       artwork = Artwork(
         section_id=section,
         title=title,
+        artist_name=artist_name,
         medium=medium,
         date_published=date_published,
         dimen_width_cm=dimen_width_cm,

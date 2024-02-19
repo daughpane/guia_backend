@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -11,7 +11,7 @@ from ..serializers import ArtworkSerializer
 
 class ArtworkCreateView(APIView):
     serializer_class = ArtworkSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [HasAPIKey]
 
     def post(self, request, *args, **kwargs):
       try:
@@ -55,7 +55,7 @@ class ArtworkCreateView(APIView):
 
 class ArtworkListView(APIView):
     serializer_class = ArtworkSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [HasAPIKey]
 
     def get(self, request, *args, **kwargs):
         artworks = Artwork.objects.all()
