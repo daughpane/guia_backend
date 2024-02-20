@@ -14,6 +14,9 @@ urlpatterns += [
   ###### MUSEUM PATHS 
   path('museum/get', views.MuseumApiView.as_view()),
 
+  ###### SECTION PATHS
+  path('section/get', views.SectionApiView.as_view()),
+
   ###### ADMIN
   path('admin/login', views.AdminLoginApiView.as_view()),
   path('admin/change-password', views.ChangePasswordApiView.as_view()),
