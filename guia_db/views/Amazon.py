@@ -27,7 +27,7 @@ class S3CredentialsAPIView(APIView):
               aws_access_key_id=aws_access_key_id,
               aws_secret_access_key=aws_secret_access_key
           )
-          art_id = request.data.get("art_id")
+          
           image_name = request.data.get("image_name")
           
           #Generate the presigned URL
@@ -39,11 +39,12 @@ class S3CredentialsAPIView(APIView):
               'detail': "Only JPEG files are allowed.",
               'dev_message': ''
               }, 
-              status=status.HTTP_403_FORBIDDEN)
+              status=status.HTTP_403_FORBIDDEN
+          )
 
           response = s3_client.generate_presigned_post(
               Bucket = bucket_name,
-              Key = f"art{art_id}/{image_name}",
+              Key = f"artworks/{image_name}",
               ExpiresIn = 600,
               Fields={"Content-Type": "image/jpeg"},
               Conditions = [ {"Content-Type": "image/jpeg"} ]
