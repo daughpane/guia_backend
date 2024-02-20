@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
@@ -58,6 +58,43 @@ class ArtworkCreateView(APIView):
           data={
             'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
+
+class ArtworkView(APIView):
+    serializer_class = ArtworkViewSerializer
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
+
+    def get(self, request, *args, **kwargs):
+      try:
+        serializer = self.serializer_class(data=request.query_params, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        artwork = serializer.validated_data['artwork']
+        images = serializer.validated_data['images']
+        artwork_data = ArtworkSerializer(artwork).data
+        artwork_data["images"] = ArtworkImageSerializer(images, many=True).data
+
+        return Response(
+          data = {
+            'artwork': artwork_data
+          },
+          status=status.HTTP_200_OK
+        )
+
+      except ObjectDoesNotExist as e:
+        return Response(
+          data={
+          'detail': e.args[0],
+          'dev_message': ''
+          }, 
+          status=status.HTTP_400_BAD_REQUEST)
+
+      except ValidationError as e:
+        return Response(
+          data={
+            'detail': e.detail
+          }, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ArtworkListView(APIView):
     serializer_class = ArtworkSerializer
