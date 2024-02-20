@@ -15,7 +15,7 @@ urlpatterns += [
   path('museum/get', views.MuseumApiView.as_view()),
 
   ###### SECTION PATHS
-  path('section/get', views.MuseumApiView.as_view()),
+  path('section/get', views.SectionApiView.as_view()),
 
   ###### ADMIN
   path('admin/login', views.AdminLoginApiView.as_view()),
