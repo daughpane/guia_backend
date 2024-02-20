@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from ..models import Artwork, Section, Admin
+from ..models import Artwork, Section, Admin, ArtworkImage
 
 
 def greater_than_zero(value):
@@ -78,3 +78,31 @@ class ArtworkSerializer(serializers.Serializer):
       data['images'] = images
       data['thumbnail'] = thumbnail
       return data
+
+class ArtworkViewSerializer(serializers.Serializer):
+  art_id = serializers.IntegerField(required=True)
+
+  def validate(self, data):
+    art_id = data.get("art_id")
+    try:
+      artwork = Artwork.objects.get(art_id=art_id)
+      images = ArtworkImage.objects.all().filter(artwork=artwork)
+      
+    except ObjectDoesNotExist:
+      raise ObjectDoesNotExist("Artwork does not exist.")
+
+    data['artwork'] = artwork
+    data['images'] = images
+    return data
+
+
+class ArtworkSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = Artwork
+      fields = '__all__'
+
+class ArtworkImageSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = ArtworkImage
+      fields = ['image_link', 'is_thumbnail']
+    
