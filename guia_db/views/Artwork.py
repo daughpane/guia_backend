@@ -3,15 +3,20 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
 from ..serializers import ArtworkSerializer
 
+from ..authentication import ExpiringTokenAuthentication
+
 class ArtworkCreateView(APIView):
     serializer_class = ArtworkSerializer
-    permission_classes = [HasAPIKey]
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
 
     def post(self, request, *args, **kwargs):
       try:
@@ -24,9 +29,10 @@ class ArtworkCreateView(APIView):
         images = serializer.validated_data['images']
         thumbnail = serializer.validated_data['thumbnail']
         for image in images:
+          print(str(image))
           artworkImage = ArtworkImage(
             artwork = artwork,
-            image = image,
+            image_link = str(image),
             is_thumbnail = thumbnail==str(image)
           )
           artworkImage.save()

@@ -27,7 +27,7 @@ class ArtworkSerializer(serializers.Serializer):
     additional_info = serializers.CharField()
     added_by = serializers.IntegerField(required=True)
     # Accepts list of images
-    images = serializers.ListField(child=serializers.ImageField(), validators=[validate_images_length])
+    images = serializers.ListField(child=serializers.CharField(), validators=[validate_images_length])
     thumbnail = serializers.CharField()
 
     def validate(self, data):

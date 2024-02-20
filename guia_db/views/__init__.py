@@ -1,3 +1,4 @@
+from .Amazon import *
 from .Admin import *
 from .Artwork import *
 from .ArtworkVisits import *

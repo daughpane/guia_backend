@@ -26,4 +26,7 @@ urlpatterns += [
   ###### VISITOR
   path('visitor/generate-token', views.LogVisitorApiView.as_view()),
 
+  ###### AMAZON
+  path('amazon/get-credentials', views.S3CredentialsAPIView.as_view()),
+
 ]
