@@ -41,8 +41,9 @@ class AdminLoginApiView(ObtainAuthToken):
           # Creates token if not yet created
           token, created = Token.objects.get_or_create(user=admin.user)
 
-          # Checks if token is expired
-          is_expired, token = token_expire_handler(token)   
+          if not created:
+            token.delete()
+            token = Token.objects.create(user=admin.user)
 
           # Saves token
           token.save()
@@ -123,8 +124,7 @@ class ChangePasswordApiView(APIView):
           }, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminLogoutApiView(APIView):
-  permission_classes = [IsAuthenticated, HasAPIKey]
-  authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
+  permission_classes = [HasAPIKey]
   serializer_class = LogoutSerializer
 
   def post(self, request, *args, **kwargs):  
