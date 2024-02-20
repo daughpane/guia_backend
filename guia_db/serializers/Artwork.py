@@ -22,9 +22,9 @@ class ArtworkCreateSerializer(serializers.Serializer):
     date_published = serializers.CharField(required=True)
     dimen_width_cm = serializers.DecimalField(max_digits=100, decimal_places=2, required=True, validators=[greater_than_zero])
     dimen_length_cm = serializers.DecimalField(max_digits=100, decimal_places=2, required=True, validators=[greater_than_zero])
-    dimen_height_cm = serializers.DecimalField(max_digits=100, decimal_places=2, required=False, validators=[greater_than_zero])
+    dimen_height_cm = serializers.DecimalField(max_digits=100, decimal_places=2, required=False, validators=[greater_than_zero], allow_null=True)
     description = serializers.CharField(required=True)
-    additional_info = serializers.CharField()
+    additional_info = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     added_by = serializers.IntegerField(required=True)
     # Accepts list of images
     images = serializers.ListField(child=serializers.CharField(), validators=[validate_images_length])
