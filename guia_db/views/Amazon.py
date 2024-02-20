@@ -3,7 +3,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+from ..authentication import ExpiringTokenAuthentication
 
 import boto3
 import environ
@@ -14,6 +18,8 @@ environ.Env.read_env()
 
 class S3CredentialsAPIView(APIView):
     permission_classes = [HasAPIKey]
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
 
     def post(self, request):
         # Replace these variables with your own AWS credentials and bucket name
