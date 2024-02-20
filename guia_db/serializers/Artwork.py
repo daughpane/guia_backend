@@ -14,7 +14,7 @@ def validate_images_length(images):
     if len(images) != 10:
         raise ValidationError("10 artwork images are required.")
 
-class ArtworkSerializer(serializers.Serializer):
+class ArtworkCreateSerializer(serializers.Serializer):
     section_id = serializers.IntegerField(required=True)
     title = serializers.CharField(required=True)
     artist_name = serializers.CharField(required=True)

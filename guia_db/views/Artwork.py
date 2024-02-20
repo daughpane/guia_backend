@@ -9,12 +9,12 @@ from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
 class ArtworkCreateView(APIView):
-    serializer_class = ArtworkSerializer
+    serializer_class = ArtworkCreateSerializer
     permission_classes = [IsAuthenticated, HasAPIKey]
     authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
 
@@ -29,7 +29,6 @@ class ArtworkCreateView(APIView):
         images = serializer.validated_data['images']
         thumbnail = serializer.validated_data['thumbnail']
         for image in images:
-          print(str(image))
           artworkImage = ArtworkImage(
             artwork = artwork,
             image_link = str(image),
