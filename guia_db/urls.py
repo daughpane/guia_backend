@@ -24,6 +24,7 @@ urlpatterns += [
 
   ###### ARTWORK
   path('artwork/create', views.ArtworkCreateView.as_view()),
+  path('artwork/edit', views.ArtworkEditView.as_view()),
   path('artwork/get', views.ArtworkView.as_view()),
   path('artwork/get/all', views.ArtworkListView.as_view()),
 
