@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
@@ -94,7 +94,49 @@ class ArtworkView(APIView):
             'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
 
+class ArtworkEditView(APIView):
+    serializer_class = ArtworkEditSerializer
+    permission_classes = [IsAuthenticated, HasAPIKey]
+    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
+    
+    def post(self, request, *args, **kwargs):
+      try:
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
 
+        artwork = serializer.validated_data['artwork']
+        artwork.save()
+        
+        images_list = serializer.validated_data['images_list']
+        images_url = serializer.validated_data['images_url']
+        thumbnail = serializer.validated_data['thumbnail']
+
+        for index, artworkImage in enumerate(images_list):
+          artworkImage.image_link = str(images_url[index])
+          artworkImage.is_thumbnail = thumbnail == str(images_url[index])
+          artworkImage.save()
+
+        return Response(
+          data = {
+            'message': "Artwork edited successfully."
+          },
+          status=status.HTTP_201_CREATED
+        )
+
+      except ObjectDoesNotExist as e:
+        return Response(
+          data={
+          'detail': e.args[0],
+          'dev_message': ''
+          }, 
+          status=status.HTTP_400_BAD_REQUEST)
+
+      except ValidationError as e:
+        return Response(
+          data={
+            'detail': e.detail
+          }, status=status.HTTP_400_BAD_REQUEST)
+    
 class ArtworkListView(APIView):
     serializer_class = ArtworkSerializer
     permission_classes = [HasAPIKey]
