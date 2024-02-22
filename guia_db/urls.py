@@ -28,6 +28,9 @@ urlpatterns += [
   path('artwork/get', views.ArtworkView.as_view()),
   path('artwork/get/all', views.ArtworkListView.as_view()),
 
+  ##### ARTWORK IMAGES
+  path('artwork-images/get/all', views.ArtworkImageGetView.as_view()),
+
   ###### VISITOR
   path('visitor/generate-token', views.LogVisitorApiView.as_view()),
 

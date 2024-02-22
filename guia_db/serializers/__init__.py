@@ -4,3 +4,4 @@ from .ArtworkVisits import *
 from .Museum import *
 from .Section import *
 from .Visitor import *
+from .ArtworkImage import *
