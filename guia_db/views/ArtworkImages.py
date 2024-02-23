@@ -8,7 +8,7 @@ from django.db.models import F
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import FieldError
 
-from ..models import ArtworkImage
+from ..models import ArtworkImage, Artwork
 from ..serializers import ArtGroupSerializer
 
 class ArtworkImageGetView(APIView):
@@ -16,7 +16,13 @@ class ArtworkImageGetView(APIView):
 
   def get(self, request, *args, **kwargs):
     try:
-      artworkImages = ArtworkImage.objects.values('artwork__art_id').annotate(image_links = ArrayAgg('image_link'))
+      filtered_artworks = Artwork.objects.filter(is_deleted=False)
+      artworkImages = ArtworkImage.objects.filter(
+         artwork__in=filtered_artworks,
+         is_deleted=False
+      ).values('artwork__art_id').annotate(
+        image_links = ArrayAgg('image_link')
+      ).order_by('artwork__art_id')
 
       serializer = ArtGroupSerializer(artworkImages, many=True)
 

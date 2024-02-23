@@ -15,6 +15,8 @@ class ArtworkImage(models.Model):
 
     image_link = models.TextField(blank=True)
 
-    is_thumbnail = models.BooleanField(default=False)        
+    is_thumbnail = models.BooleanField(default=False)    
+
+    is_deleted = models.BooleanField(default=False)      
     class Meta:
         verbose_name_plural = "Artwork Images"

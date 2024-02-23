@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer, ArtworkDeleteSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
@@ -136,7 +136,51 @@ class ArtworkEditView(APIView):
           data={
             'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+class ArtworkDeleteView(APIView):
+  serializer_class = ArtworkDeleteSerializer
+  permission_classes = [IsAuthenticated, HasAPIKey]
+
+  def post(self, request, *args, **kwargs):
+      try:
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        artwork = serializer.validated_data['artwork']
+        artwork.is_deleted = True
+
+        images_list = serializer.validated_data['images_list']
+
+        for image in images_list:
+          image.is_deleted = True
+          image.save()
+
+        artwork.save()
+
+        return Response(
+          data = {
+            'message': "Artwork deleted successfully."
+          },
+          status=status.HTTP_200_OK
+        )
+
+      except ObjectDoesNotExist as e:
+        return Response(
+          data={
+          'detail': e.args[0],
+          'dev_message': ''
+          }, 
+          status=status.HTTP_400_BAD_REQUEST)
+
+      except ValidationError as e:
+        return Response(
+          data={
+            'detail': e.detail
+          }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class ArtworkListView(APIView):
     serializer_class = ArtworkSerializer
     permission_classes = [HasAPIKey]

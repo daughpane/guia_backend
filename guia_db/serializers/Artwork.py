@@ -57,7 +57,7 @@ class ArtworkCreateSerializer(serializers.Serializer):
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin does not exist.")
       
-      if Artwork.objects.filter(title=title, artist_name=artist_name).exists():
+      if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False).exists():
           raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
       
       artwork = Artwork(
@@ -85,8 +85,8 @@ class ArtworkViewSerializer(serializers.Serializer):
   def validate(self, data):
     art_id = data.get("art_id")
     try:
-      artwork = Artwork.objects.get(art_id=art_id)
-      images = ArtworkImage.objects.all().filter(artwork=artwork)
+      artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
+      images = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
       
     except ObjectDoesNotExist:
       raise ObjectDoesNotExist("Artwork does not exist.")
@@ -142,8 +142,8 @@ class ArtworkEditSerializer(serializers.Serializer):
       
 
       try:
-        artwork = Artwork.objects.get(art_id=art_id)
-        images_list = ArtworkImage.objects.all().filter(artwork=artwork)
+        artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
+        images_list = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
 
         if artwork.title != title and artwork.artist_name != artist_name and Artwork.objects.filter(title=title, artist_name=artist_name).exists():
           raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
@@ -168,6 +168,25 @@ class ArtworkEditSerializer(serializers.Serializer):
       data['images_url'] = images_url
       data['images_list'] = images_list
       data['thumbnail'] = thumbnail
+      return data
+
+class ArtworkDeleteSerializer(serializers.Serializer):
+  art_id = serializers.IntegerField(required=True)
+
+  def validate(self, data):
+      art_id = data.get("art_id")
+
+      try:
+        artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
+        images_list = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
+
+        
+
+      except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("Artwork does not exist.")
+      
+      data['artwork'] = artwork
+      data['images_list'] = images_list
       return data
 
 class ArtworkSerializer(serializers.ModelSerializer):
