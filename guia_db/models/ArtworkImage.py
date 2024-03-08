@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from ..models import Artwork
 
+from ..utils import get_presigned_urls
 class ArtworkImage(models.Model):
     artwork = models.ForeignKey(
         Artwork, 
@@ -20,3 +21,8 @@ class ArtworkImage(models.Model):
     is_deleted = models.BooleanField(default=False)      
     class Meta:
         verbose_name_plural = "Artwork Images"
+
+    @property
+    def _image_link(self):
+        # Perform the calculation here
+        return get_presigned_urls(self.image_link)

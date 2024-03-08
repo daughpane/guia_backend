@@ -11,6 +11,7 @@ from django.core.exceptions import FieldError
 from ..models import ArtworkImage, Artwork
 from ..serializers import ArtGroupSerializer
 
+from ..utils import get_presigned_urls
 class ArtworkImageGetView(APIView):
   permission_classes = [HasAPIKey]
 
@@ -24,6 +25,14 @@ class ArtworkImageGetView(APIView):
         image_links = ArrayAgg('image_link')
       ).order_by('artwork__art_id')
 
+      for art in artworkImages:
+        links = []
+        # links = art.image_links
+        for image in art['image_links']:
+          links.append(get_presigned_urls(image))
+        
+        art['image_links'] = links
+  
       serializer = ArtGroupSerializer(artworkImages, many=True)
 
       return Response(

@@ -13,6 +13,8 @@ from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImage
 
 from ..authentication import ExpiringTokenAuthentication
 
+from ..utils import get_presigned_urls
+
 class ArtworkCreateView(APIView):
     serializer_class = ArtworkCreateSerializer
     permission_classes = [IsAuthenticated, HasAPIKey]
@@ -69,9 +71,16 @@ class ArtworkView(APIView):
         serializer.is_valid(raise_exception=True)
 
         artwork = serializer.validated_data['artwork']
+
         images = serializer.validated_data['images']
+
+        images_presigned = []
+
+        for image in images:
+          images_presigned.append(image._image_link)
+
         artwork_data = ArtworkSerializer(artwork).data
-        artwork_data["images"] = ArtworkImageSerializer(images, many=True).data
+        artwork_data["images"] = images_presigned
 
         return Response(
           data = {
