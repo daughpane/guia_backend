@@ -195,9 +195,16 @@ class ArtworkListView(APIView):
 
     def get(self, request, *args, **kwargs):
         artworks = Artwork.objects.all()
-        serializer = self.serializer_class(artworks, many=True)
-        
+        artworks_data = ArtworkSerializer(artworks, many=True).data
+
+        for art in artworks_data:
+          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"])
+          images_data = ArtworkImageSerializer(images, many=True).data
+          art["images"] = images_data
+
         return Response(
-            serializer.data, 
-            status=status.HTTP_200_OK
+          data = {
+            'artworks': artworks_data
+          },
+          status=status.HTTP_200_OK
         )
