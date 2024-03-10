@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer, ArtworkDeleteSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer, ArtworkDeleteSerializer, ArtworkListViewSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
@@ -62,8 +62,7 @@ class ArtworkCreateView(APIView):
 
 class ArtworkView(APIView):
     serializer_class = ArtworkViewSerializer
-    permission_classes = [IsAuthenticated, HasAPIKey]
-    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
+    permission_classes = [HasAPIKey]
 
     def get(self, request, *args, **kwargs):
       try:
@@ -190,19 +189,20 @@ class ArtworkDeleteView(APIView):
 
 
 class ArtworkListView(APIView):
-    serializer_class = ArtworkSerializer
+    serializer_class = ArtworkListViewSerializer
     permission_classes = [HasAPIKey]
 
     def get(self, request, *args, **kwargs):
-        artworks = Artwork.objects.all()
+        serializer = self.serializer_class(data=request.query_params, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        artworks = serializer.validated_data['artworks']
         artworks_data = ArtworkSerializer(artworks, many=True).data
 
         for art in artworks_data:
-          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"], is_deleted=False)
-          for image in images:
-            image.image_link = image._image_link
-          images_data = ArtworkImageSerializer(images, many=True).data
-          art["images"] = images_data
+          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"], is_deleted=False, is_thumbnail=True)
+          if len(images)>0:
+            art["image_thumbnail"] = images[0]._image_link
 
         return Response(
           data = {

@@ -199,3 +199,18 @@ class ArtworkImageSerializer(serializers.ModelSerializer):
       model = ArtworkImage
       fields = ['image_link', 'is_thumbnail']
     
+class ArtworkListViewSerializer(serializers.Serializer):
+  admin_id = serializers.IntegerField(required=True)
+
+  def validate(self, data):
+    admin_id = data.get("admin_id")
+    try:
+      admin_id = Admin.objects.get(user__id=admin_id)
+      artworks = Artwork.objects.all().filter(
+        section_id__museum_id = admin_id.museum_id
+      )
+      print(artworks)
+      data["artworks"] = artworks
+      return data
+    except ObjectDoesNotExist:
+      raise ObjectDoesNotExist("Admin does not exist.")
