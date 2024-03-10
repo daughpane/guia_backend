@@ -5,3 +5,4 @@ from .Museum import *
 from .Section import *
 from .Visitor import *
 from .ArtworkImage import *
+from .Dashboard import *
