@@ -74,13 +74,12 @@ class ArtworkView(APIView):
 
         images = serializer.validated_data['images']
 
-        images_presigned = []
-
         for image in images:
-          images_presigned.append(image._image_link)
+          image.image_link = image._image_link
 
         artwork_data = ArtworkSerializer(artwork).data
-        artwork_data["images"] = images_presigned
+
+        artwork_data["images"] = ArtworkImageSerializer(images, many=True).data
 
         return Response(
           data = {
