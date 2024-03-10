@@ -35,7 +35,8 @@ class DashboardStatsView(APIView):
 
       for art in popular_artworks_data:
         images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"], is_deleted=False, is_thumbnail=True)
-        art["image_thumbnail"] = images[0]._image_link
+        if len(images) > 0:
+          art["image_thumbnail"] = images[0]._image_link
 
       return Response(
           data = {
