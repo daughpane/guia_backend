@@ -62,8 +62,7 @@ class ArtworkCreateView(APIView):
 
 class ArtworkView(APIView):
     serializer_class = ArtworkViewSerializer
-    permission_classes = [IsAuthenticated, HasAPIKey]
-    authentication_classes = [SessionAuthentication, ExpiringTokenAuthentication]
+    permission_classes = [HasAPIKey]
 
     def get(self, request, *args, **kwargs):
       try:
