@@ -6,3 +6,4 @@ from .ArtworkImages import *
 from .Museum import *
 from .Section import *
 from .Visitor import *
+from .Dashboard import *

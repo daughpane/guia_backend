@@ -198,7 +198,7 @@ class ArtworkListView(APIView):
         artworks_data = ArtworkSerializer(artworks, many=True).data
 
         for art in artworks_data:
-          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"])
+          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"], is_deleted=False)
           for image in images:
             image.image_link = image._image_link
           images_data = ArtworkImageSerializer(images, many=True).data

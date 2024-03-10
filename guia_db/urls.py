@@ -38,4 +38,7 @@ urlpatterns += [
   ###### AMAZON
   path('amazon/get-credentials', views.S3CredentialsAPIView.as_view()),
 
+  ##### DASHBOARD
+  path('dashboard/get', views.DashboardStatsView.as_view()),
+
 ]

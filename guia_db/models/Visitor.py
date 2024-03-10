@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib import admin
 import uuid
 
+from .Museum import Museum
+
 # Define the attributes and methods of the Visitor model
 class Visitor(models.Model):
     # unique id for each visitors
@@ -11,6 +13,13 @@ class Visitor(models.Model):
     visitor_token = models.TextField(editable=False)
     # automatically setting the datetime when visitor object is created
     visited_on = models.DateTimeField(auto_now_add=True)
+    # museum which the visitor visited
+    museum_id = models.ForeignKey(
+        Museum,
+        on_delete = models.CASCADE,
+        verbose_name = 'museum_id',
+        default=1
+    )
 
     # Override the save method
     def save(self, *args, **kwargs):
