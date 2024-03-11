@@ -200,6 +200,13 @@ class ArtworkDeleteView(APIView):
           data={
             'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
+      
+      except PermissionDenied as e:
+        return Response(
+          data={
+            'detail': e.detail,
+            'dev_message': 'Logged in user do not have access to the museum where the artwork exists.'
+          }, status=status.HTTP_400_BAD_REQUEST)
 
 
 
