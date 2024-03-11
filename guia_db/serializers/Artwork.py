@@ -58,7 +58,7 @@ class ArtworkCreateSerializer(serializers.Serializer):
         added_by = Admin.objects.get(user__id=added_by)
         
       except ObjectDoesNotExist:
-        raise ObjectDoesNotExist("Admin does not exist.")
+        raise ObjectDoesNotExist("User does not exist.")
       
       # Check if who is logged in is who made the create request
       request_user = self.context['request'].user
@@ -166,16 +166,18 @@ class ArtworkEditSerializer(serializers.Serializer):
         updated_by = Admin.objects.get(user__id=updated_by)
 
       except ObjectDoesNotExist:
-        raise ObjectDoesNotExist("Admin does not exist.")
+        raise ObjectDoesNotExist("User does not exist.")
 
       # Check if who is logged in is who made the create request
       request_user = self.context['request'].user
       if updated_by.user != request_user:
-        raise PermissionDenied("Logged in admin should make the edit artwork request.")
+        # raise PermissionDenied("Logged in admin should make the edit artwork request.")
+        raise PermissionDenied("Unathorized Access.")
 
       # Check if ang iyang gi edit an section is sa museum na iyang gi work-an
       if section.museum_id != updated_by.museum_id:
-        raise PermissionDenied("Admin not allowed to edit artwork in this section.")
+        # raise PermissionDenied("Admin not allowed to edit artwork in this section.")
+        raise PermissionDenied("Unauthorized Access.")
 
       try:
         artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
@@ -268,4 +270,4 @@ class ArtworkListViewSerializer(serializers.Serializer):
       data["artworks"] = artworks
       return data
     except ObjectDoesNotExist:
-      raise ObjectDoesNotExist("Admin does not exist.")
+      raise ObjectDoesNotExist("User does not exist.")

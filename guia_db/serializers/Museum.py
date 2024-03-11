@@ -17,7 +17,7 @@ class GetMuseumSerializer(serializers.Serializer):
       museum = Museum.objects.all().filter(museum_id=museum_id)
 
       if(len(museum)==0):
-        raise ObjectDoesNotExist("Museum not found.")
+        raise ObjectDoesNotExist("Museum does not exist.")
       
     data['museum'] = museum
     return data

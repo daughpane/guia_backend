@@ -38,13 +38,13 @@ class ExpiringTokenAuthentication(TokenAuthentication):
         try:
             token = Token.objects.get(key = key)
         except Token.DoesNotExist:
-            raise AuthenticationFailed("Invalid Token")
+            raise AuthenticationFailed("Invalid Token.")
         
         if not token.user.is_active:
-            raise AuthenticationFailed("User is not active")
+            raise AuthenticationFailed("User is not active.")
 
         is_expired, token = token_expire_handler(token)
         if is_expired:
-            raise AuthenticationFailed("The Token is expired")
+            raise AuthenticationFailed("Token has expired.")
         
         return (token.user, token)
