@@ -97,15 +97,27 @@ class ArtworkCreateSerializer(serializers.Serializer):
 
 class ArtworkViewSerializer(serializers.Serializer):
   art_id = serializers.IntegerField(required=True)
+  admin_id = serializers.IntegerField(required=False)
 
   def validate(self, data):
     art_id = data.get("art_id")
+    admin_id = data.get("admin_id")
+
     try:
       artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
       images = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
       
     except ObjectDoesNotExist:
       raise ObjectDoesNotExist("Artwork does not exist.")
+    
+    if admin_id != None:
+      try: 
+        admin = Admin.objects.get(user__id=admin_id)
+      except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("Admin does not exist.")
+
+      if artwork.section_id.museum_id != admin.museum_id:
+        raise PermissionDenied("Admin not allowed to acess this artwork.")
 
     data['artwork'] = artwork
     data['images'] = images
