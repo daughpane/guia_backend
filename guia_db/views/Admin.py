@@ -63,7 +63,7 @@ class AdminLoginApiView(ObtainAuthToken):
 
       except ObjectDoesNotExist as e:
         return Response(data={
-          'detail': 'Invalid credentials.',
+          'detail': 'Invalid login credentials.',
           'dev_message': 'Wrong username or password.'
           }, status=status.HTTP_401_UNAUTHORIZED)
 
