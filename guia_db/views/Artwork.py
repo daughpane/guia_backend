@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
@@ -30,6 +30,7 @@ class ArtworkCreateView(APIView):
 
         images = serializer.validated_data['images']
         thumbnail = serializer.validated_data['thumbnail']
+
         for image in images:
           artworkImage = ArtworkImage(
             artwork = artwork,
@@ -58,6 +59,13 @@ class ArtworkCreateView(APIView):
         return Response(
           data={
             'detail': e.detail
+          }, status=status.HTTP_400_BAD_REQUEST)
+      
+      except PermissionDenied as e:
+        return Response(
+          data={
+            'detail': e.detail,
+            'dev_message': 'Logged in user and updated user do not match.'
           }, status=status.HTTP_400_BAD_REQUEST)
 
 class ArtworkView(APIView):
@@ -144,6 +152,13 @@ class ArtworkEditView(APIView):
             'detail': e.detail
           }, status=status.HTTP_400_BAD_REQUEST)
 
+      except PermissionDenied as e:
+        return Response(
+          data={
+            'detail': e.detail,
+            'dev_message': 'Logged in user and updated user do not match.'
+          }, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ArtworkDeleteView(APIView):
   serializer_class = ArtworkDeleteSerializer
@@ -184,6 +199,13 @@ class ArtworkDeleteView(APIView):
         return Response(
           data={
             'detail': e.detail
+          }, status=status.HTTP_400_BAD_REQUEST)
+      
+      except PermissionDenied as e:
+        return Response(
+          data={
+            'detail': e.detail,
+            'dev_message': 'Logged in user do not have access to the museum where the artwork exists.'
           }, status=status.HTTP_400_BAD_REQUEST)
 
 
