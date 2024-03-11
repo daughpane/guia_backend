@@ -251,8 +251,8 @@ class ArtworkListViewSerializer(serializers.Serializer):
       artworks = Artwork.objects.all().filter(
         section_id__museum_id = admin_id.museum_id,
         is_deleted=False
-      )
-      
+      ).order_by("art_id")
+
       data["artworks"] = artworks
       return data
     except ObjectDoesNotExist:
