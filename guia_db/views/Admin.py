@@ -120,7 +120,7 @@ class ChangePasswordApiView(APIView):
       except ValidationError as e:
         return Response(
           data={
-            'detail': e.detail
+            'detail':  ' '.join(e.detail["non_field_errors"])
           }, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminLogoutApiView(APIView):

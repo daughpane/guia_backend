@@ -34,7 +34,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     admin_id = serializers.CharField(required=True)
     old_password = serializers.CharField(required=True)
     # Add django's password validator to check password requirements
-    new_password = serializers.CharField(required=True, validators=[validate_password])
+    new_password = serializers.CharField(required=True)
 
     def validate(self, data):
       admin_id = data.get('admin_id')
@@ -53,6 +53,8 @@ class ChangePasswordSerializer(serializers.Serializer):
 
       if old_password==new_password:
         raise ValidationError("Password has already been used.")
+
+      validate_password(new_password)
           
       data['admin'] = admin
       return data
