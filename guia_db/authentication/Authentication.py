@@ -45,7 +45,6 @@ class ExpiringTokenAuthentication(TokenAuthentication):
 
         is_expired, token = token_expire_handler(token)
         if is_expired:
-            # raise ObjectDoesNotExist("The Token is expired."
-            raise AuthenticationFailed("Token is expired.")
+            raise AuthenticationFailed("Token has expired.")
         
         return (token.user, token)

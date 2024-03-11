@@ -23,7 +23,6 @@ class AdminSerializer(serializers.Serializer):
       admin = Admin.objects.get(user=user)
       
     except ObjectDoesNotExist:
-      # raise ObjectDoesNotExist("Admin username does not exist.")
       raise ObjectDoesNotExist("Username does not exist.")
     
     data['admin'] = admin
@@ -47,14 +46,12 @@ class ChangePasswordSerializer(serializers.Serializer):
         admin = Admin.objects.get(user__id=admin_id)
         
       except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Admin username does not exist.")
         raise ObjectDoesNotExist("Username does not exist.")
 
       if not admin.user.check_password(old_password):
         raise AuthenticationFailed("Invalid login credentials.")
 
       if old_password==new_password:
-        # raise ValidationError("Password already used.")
         raise ValidationError("Password has already been used.")
           
       data['admin'] = admin
@@ -71,7 +68,6 @@ class LogoutSerializer(serializers.Serializer):
       try:
         admin = Admin.objects.get(user__id=admin_id)
       except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Admin username does not exist.")
         raise ObjectDoesNotExist("Username does not exist.")
 
 

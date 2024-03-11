@@ -55,7 +55,6 @@ class ArtworkCreateSerializer(serializers.Serializer):
         added_by = Admin.objects.get(user__id=added_by)
 
       except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Admin does not exist.")
         raise ObjectDoesNotExist("User does not exist.")
       
       if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False).exists():
@@ -139,7 +138,6 @@ class ArtworkEditSerializer(serializers.Serializer):
         updated_by = Admin.objects.get(user__id=updated_by)
 
       except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Admin does not exist.")
         raise ObjectDoesNotExist("User does not exist.")
       
 
@@ -215,5 +213,4 @@ class ArtworkListViewSerializer(serializers.Serializer):
       data["artworks"] = artworks
       return data
     except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Admin does not exist.")
       raise ObjectDoesNotExist("User does not exist.")

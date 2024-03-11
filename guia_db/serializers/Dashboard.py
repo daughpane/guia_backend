@@ -68,7 +68,6 @@ class GetDashboardSerializer(serializers.Serializer):
       data["popular_sections"] = popular_sections
 
     except ObjectDoesNotExist:
-      # raise ObjectDoesNotExist("Admin does not exist.")
       raise ObjectDoesNotExist("User does not exist.")
       
     # data['museum'] = museum

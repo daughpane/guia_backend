@@ -16,7 +16,6 @@ class GetSectionSerializer(serializers.Serializer):
     try:
       museum = Museum.objects.get(museum_id=museum_id)
     except ObjectDoesNotExist:
-        # raise ObjectDoesNotExist("Museum not found.")
       raise ObjectDoesNotExist("Museum does not exist.")
 
     if(section_id == None):
@@ -25,7 +24,6 @@ class GetSectionSerializer(serializers.Serializer):
       section = Section.objects.filter(museum_id=museum.museum_id, section_id=section_id)
 
       if(len(section)==0):
-        # raise ObjectDoesNotExist("Section not found.")
         raise ObjectDoesNotExist("Section does not exist.")
       
     data['section'] = section
