@@ -49,7 +49,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         raise ObjectDoesNotExist("Admin username does not exist.")
 
       if not admin.user.check_password(old_password):
-        raise AuthenticationFailed("Invalid credentials.")
+        raise AuthenticationFailed("Invalid login credentials.")
 
       if old_password==new_password:
         raise ValidationError("Password already used.")
