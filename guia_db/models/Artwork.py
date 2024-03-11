@@ -42,7 +42,7 @@ class Artwork(models.Model):
         verbose_name = 'added by'
     )
     # automatically update the field to the current date and time whenever the Artwork object is saved
-    updated_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(null=True)
     # admin_id is a foreign key from the Admin model
     # when the referenced Admin is deleted, set updated_by to NULL
     # allows NULL values if no one has updated the artwork yet

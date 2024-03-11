@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from ..models import Artwork, Section, Admin, ArtworkImage
 
@@ -45,20 +46,35 @@ class ArtworkCreateSerializer(serializers.Serializer):
       images = data.get('images', [])
       thumbnail = data.get("thumbnail")
 
+      # Check if section exists
       try:
         section = Section.objects.get(section_id=section_id)
 
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Section does not exist.")
 
+      # Check if added by id is one of the admin
       try:
         added_by = Admin.objects.get(user__id=added_by)
-
+        
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin does not exist.")
       
-      if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False).exists():
+      # Check if who is logged in is who made the create request
+      request_user = self.context['request'].user
+      if added_by.user != request_user:
+        raise PermissionDenied("Logged in admin should make the create artwork request.")
+
+      # Check if ang iyang gi edit an section is sa museum na iyang gi work-an
+      if section.museum_id != added_by.museum_id:
+        raise PermissionDenied("Admin not allowed to add artwork in this section.")
+
+      
+      if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False, section_id=section).exists():
           raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
+
+      if thumbnail not in images:
+        raise ValidationError({"thumbnail": "Thumbnail should be one of the images."})
       
       artwork = Artwork(
         section_id=section,
@@ -139,17 +155,32 @@ class ArtworkEditSerializer(serializers.Serializer):
 
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Admin does not exist.")
-      
+
+      # Check if who is logged in is who made the create request
+      request_user = self.context['request'].user
+      if updated_by.user != request_user:
+        raise PermissionDenied("Logged in admin should make the edit artwork request.")
+
+      # Check if ang iyang gi edit an section is sa museum na iyang gi work-an
+      if section.museum_id != updated_by.museum_id:
+        raise PermissionDenied("Admin not allowed to edit artwork in this section.")
 
       try:
         artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
         images_list = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
-
-        if artwork.title != title and artwork.artist_name != artist_name and Artwork.objects.filter(title=title, artist_name=artist_name).exists():
-          raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
       
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Artwork does not exist.")
+      
+      if artwork.title != title and artwork.artist_name != artist_name and Artwork.objects.filter(
+          title=title, 
+          artist_name=artist_name,
+          is_deleted=False, 
+          section_id=section).exists():
+          raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
+
+      if thumbnail not in images_url:
+          raise ValidationError({"thumbnail": "Thumbnail should be one of the images."})
 
       artwork.section_id = section
       artwork.title = title
@@ -159,6 +190,7 @@ class ArtworkEditSerializer(serializers.Serializer):
       artwork.description = description
       artwork.additional_info = additional_info
       artwork.updated_by = updated_by
+      artwork.updated_on = timezone.now()
       artwork.dimen_width_cm = dimen_width_cm
       artwork.dimen_length_cm = dimen_length_cm
       artwork.dimen_height_cm = dimen_height_cm
@@ -180,10 +212,20 @@ class ArtworkDeleteSerializer(serializers.Serializer):
         artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
         images_list = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
 
-        
-
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Artwork does not exist.")
+        
+      request_user = self.context['request'].user
+      try:
+        admin = Admin.objects.get(user=request_user)
+      except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("Admin does not exist.")
+
+      if artwork.section_id.museum_id != admin.museum_id:
+        raise PermissionDenied("Admin not allowed to delete artwork in this section.")
+
+      artwork.updated_on = timezone.now()
+      artwork.updated_by = admin
       
       data['artwork'] = artwork
       data['images_list'] = images_list
@@ -207,9 +249,10 @@ class ArtworkListViewSerializer(serializers.Serializer):
     try:
       admin_id = Admin.objects.get(user__id=admin_id)
       artworks = Artwork.objects.all().filter(
-        section_id__museum_id = admin_id.museum_id
+        section_id__museum_id = admin_id.museum_id,
+        is_deleted=False
       )
-      print(artworks)
+      
       data["artworks"] = artworks
       return data
     except ObjectDoesNotExist:
