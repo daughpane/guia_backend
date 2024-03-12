@@ -71,7 +71,11 @@ class ArtworkCreateSerializer(serializers.Serializer):
         raise PermissionDenied("Admin not allowed to add artwork in this section.")
 
       
-      if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False, section_id=section).exists():
+      if Artwork.objects.filter(
+          title__iexact=title, 
+          artist_name__iexact=artist_name,
+          is_deleted=False, 
+          section_id__museum_id=section.museum_id).exists():
           raise ValidationError("Artwork with the same title and artist name already exists.")
 
       if thumbnail not in images:
