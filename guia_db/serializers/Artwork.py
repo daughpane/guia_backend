@@ -3,6 +3,7 @@ from rest_framework.exceptions import ValidationError, PermissionDenied
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.db.models import Q
 
 from ..models import Artwork, Section, Admin, ArtworkImage
 
@@ -186,11 +187,11 @@ class ArtworkEditSerializer(serializers.Serializer):
       except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Artwork does not exist.")
       
-      if artwork.title != title and artwork.artist_name != artist_name and Artwork.objects.filter(
-          title=title, 
-          artist_name=artist_name,
+      if Artwork.objects.filter(
+          title__iexact=title, 
+          artist_name__iexact=artist_name,
           is_deleted=False, 
-          section_id=section).exists():
+          section_id__museum_id=section.museum_id).exclude(art_id=art_id).exists():
           raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
 
       if thumbnail not in images_url:
