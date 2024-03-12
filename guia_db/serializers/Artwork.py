@@ -72,10 +72,10 @@ class ArtworkCreateSerializer(serializers.Serializer):
 
       
       if Artwork.objects.filter(title=title, artist_name=artist_name, is_deleted=False, section_id=section).exists():
-          raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
+          raise ValidationError("Artwork with the same title and artist name already exists.")
 
       if thumbnail not in images:
-        raise ValidationError({"thumbnail": "Thumbnail should be one of the images."})
+        raise ValidationError("Thumbnail should be one of the images.")
       
       artwork = Artwork(
         section_id=section,
@@ -192,10 +192,10 @@ class ArtworkEditSerializer(serializers.Serializer):
           artist_name__iexact=artist_name,
           is_deleted=False, 
           section_id__museum_id=section.museum_id).exclude(art_id=art_id).exists():
-          raise ValidationError({"duplicate_artwork": "Artwork with the same title and artist name already exists."})
+          raise ValidationError("Artwork with the same title and artist name already exists.")
 
       if thumbnail not in images_url:
-          raise ValidationError({"thumbnail": "Thumbnail should be one of the images."})
+          raise ValidationError("Thumbnail should be one of the images.")
 
       artwork.section_id = section
       artwork.title = title

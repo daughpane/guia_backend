@@ -58,7 +58,7 @@ class ArtworkCreateView(APIView):
       except ValidationError as e:
         return Response(
           data={
-            'detail': e.detail
+            'detail': e.detail["non_field_errors"][0]
           }, status=status.HTTP_400_BAD_REQUEST)
       
       except PermissionDenied as e:
@@ -149,7 +149,7 @@ class ArtworkEditView(APIView):
       except ValidationError as e:
         return Response(
           data={
-            'detail': e.detail
+            'detail': e.detail["non_field_errors"][0]
           }, status=status.HTTP_400_BAD_REQUEST)
 
       except PermissionDenied as e:
