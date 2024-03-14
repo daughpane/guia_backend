@@ -19,5 +19,6 @@ from django.urls import path, include
 import guia_db.urls 
 urlpatterns = [
     path('skies-are-crying/', admin.site.urls),
-    path('api/', include(guia_db.urls))
+    path('api/', include(guia_db.urls)),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
