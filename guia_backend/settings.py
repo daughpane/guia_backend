@@ -170,10 +170,12 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ORIGIN_WHITELIST = [
     'https://guia-backend.azurewebsites.net',
+    'https://guia-backend.azurewebsites.net/skies-are-crying',
 ]
 
 CSRF_TRUSTED_ORIGINS=[
     'https://guia-backend.azurewebsites.net',
+    'https://guia-backend.azurewebsites.net/skies-are-crying',
 ]
 
 # AWS S3 settings
