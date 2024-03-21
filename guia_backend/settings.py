@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lo2fyd8-n7e7u=53cwrw1s8*gk@o1nu*p1yb_ds(9i)&(tp)*!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '*']
+ALLOWED_HOSTS = ['.vercel.app', 'guia-backend.azurewebsites.net', '*']
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -166,6 +166,14 @@ TOKEN_EXPIRED_AFTER_TIME = 43200
 
 CORS_ALLOW_HEADERS = [
     '*'
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'https://guia-backend.azurewebsites.net',
+]
+
+CSRF_TRUSTED_ORIGINS=[
+    'https://guia-backend.azurewebsites.net',
 ]
 
 # AWS S3 settings
