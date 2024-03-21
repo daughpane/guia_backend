@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_api_key',
     'rest_framework.authtoken',
-    'corsheaders',
     'storages'
 ]
 
@@ -168,11 +167,6 @@ TOKEN_EXPIRED_AFTER_TIME = 43200
 CORS_ALLOW_HEADERS = [
     '*'
 ]
-
-CORS_ORIGIN_WHITELIST = [
-    "https://guia-backend.azurewebsites.net"
-]
-
 
 # AWS S3 settings
 # This connects the guia_backend to Amazon S3 guia-buckets
