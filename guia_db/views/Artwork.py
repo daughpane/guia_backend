@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError, PermissionDenied
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Artwork, ArtworkImage
-from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer, ArtworkDeleteSerializer, ArtworkListViewSerializer
+from ..serializers import ArtworkSerializer, ArtworkViewSerializer, ArtworkImageSerializer, ArtworkCreateSerializer, ArtworkEditSerializer, ArtworkDeleteSerializer, ArtworkListViewSerializer, ArtworkRawSerializer
 
 from ..authentication import ExpiringTokenAuthentication
 
@@ -218,17 +218,12 @@ class ArtworkListView(APIView):
         serializer = self.serializer_class(data=request.query_params, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
-        artworks = serializer.validated_data['artworks']
-        artworks_data = ArtworkSerializer(artworks, many=True).data
-
-        for art in artworks_data:
-          images = ArtworkImage.objects.all().filter(artwork__art_id=art["art_id"], is_deleted=False, is_thumbnail=True)
-          if len(images)>0:
-            art["image_thumbnail"] = images[0]._image_link
+        artworks_raw = serializer.validated_data['artworks_raw']
+        artworks_raw_data = ArtworkRawSerializer(artworks_raw, many=True).data
 
         return Response(
           data = {
-            'artworks': artworks_data
+            'artworks_raw': artworks_raw_data
           },
           status=status.HTTP_200_OK
         )

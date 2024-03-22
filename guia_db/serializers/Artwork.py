@@ -4,6 +4,7 @@ from rest_framework.exceptions import ValidationError, PermissionDenied
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.db.models import Q
+from django.db import connection
 
 from ..models import Artwork, Section, Admin, ArtworkImage
 
@@ -254,7 +255,24 @@ class ArtworkSerializer(serializers.ModelSerializer):
     class Meta:
       model = Artwork
       fields = '__all__'
-
+class ArtworkRawSerializer(serializers.Serializer):
+  art_id = serializers.IntegerField()
+  title = serializers.CharField()
+  artist_name = serializers.CharField()
+  medium = serializers.CharField()
+  date_published = serializers.DateField()
+  dimen_width_cm = serializers.FloatField()
+  dimen_length_cm = serializers.FloatField()
+  dimen_height_cm = serializers.FloatField()
+  description = serializers.CharField()
+  additional_info = serializers.CharField()
+  added_on = serializers.DateTimeField()
+  updated_on = serializers.DateTimeField()
+  is_deleted = serializers.BooleanField()
+  section_id = serializers.IntegerField()
+  added_by = serializers.IntegerField()
+  updated_by = serializers.IntegerField()
+  image_thumbnail = serializers.CharField()
 class ArtworkImageSerializer(serializers.ModelSerializer):
     class Meta:
       model = ArtworkImage
@@ -266,13 +284,40 @@ class ArtworkListViewSerializer(serializers.Serializer):
   def validate(self, data):
     admin_id = data.get("admin_id")
     try:
-      admin_id = Admin.objects.get(user__id=admin_id)
-      artworks = Artwork.objects.all().filter(
-        section_id__museum_id = admin_id.museum_id,
-        is_deleted=False
-      ).order_by("art_id")
-
-      data["artworks"] = artworks
+      query = """
+          SELECT 
+              CAST(a.art_id AS INTEGER),
+              a.title, 
+              a.artist_name, 
+              a.medium, 
+              a.date_published, 
+              a.dimen_width_cm, 
+              a.dimen_length_cm, 
+              a.dimen_height_cm, 
+              a.description, 
+              a.additional_info, 
+              a.added_on, 
+              a.updated_on, 
+              a.is_deleted, 
+              s.section_id, 
+              a.added_by_id as added_by, 
+              a.updated_by_id as updated_by, 
+              ai.image_link as image_thumbnail
+          FROM guia_db_artwork AS a
+          JOIN guia_db_section AS s ON a.section_id_id = s.section_id
+          LEFT JOIN guia_db_admin AS ad ON ad.museum_id_id = s.museum_id_id
+          LEFT JOIN guia_db_artworkimage AS ai ON a.art_id = ai.artwork_id
+          WHERE ad.user_id = %s
+          AND a.is_deleted = FALSE
+          AND ai.is_thumbnail = TRUE
+          ORDER BY a.art_id;
+          """
+      with connection.cursor() as cursor:
+          cursor.execute(query, [admin_id])
+          columns = [col[0] for col in cursor.description]
+          rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+          
+      data["artworks_raw"] = rows
       return data
     except ObjectDoesNotExist:
       raise ObjectDoesNotExist("User does not exist.")
