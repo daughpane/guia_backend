@@ -110,7 +110,7 @@ class ArtworkViewSerializer(serializers.Serializer):
 
     try:
       artwork = Artwork.objects.get(art_id=art_id, is_deleted=False)
-      images = ArtworkImage.objects.all().filter(artwork=artwork, is_deleted=False)
+                                  
       
     except ObjectDoesNotExist:
       raise ObjectDoesNotExist("Artwork does not exist.")

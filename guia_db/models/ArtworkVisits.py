@@ -37,5 +37,7 @@ class ArtworkVisits(models.Model):
         default=VisitType.MANUAL,
     )
 
+    is_deleted = models.BooleanField(default=False)
+    updated_on = models.DateTimeField(null=True)
     class Meta:
         verbose_name_plural = "Artwork Visits"
